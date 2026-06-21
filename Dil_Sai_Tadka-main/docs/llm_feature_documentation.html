@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dil Sai Tadka — Generative AI Features Implementation Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700; /* Bold text by default */
+    background: #140d0b; /* Espresso dark background */
+    color: #eae0db; /* Creamy off-white text */
+    padding: 48px 60px;
+    max-width: 1000px;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    background: linear-gradient(135deg, #1e1310 0%, #251814 60%, #140d0b 100%);
+    border: 2px solid #c68a4c; /* Warm copper-brown border */
+    border-radius: 16px;
+    padding: 56px 48px;
+    text-align: center;
+    margin-bottom: 48px;
+    box-shadow: 0 8px 32px rgba(198, 138, 76, 0.15);
+  }
+  .cover-icon { font-size: 56px; margin-bottom: 16px; animation: bounce 2s infinite; }
+  .cover h1 { font-size: 38px; font-weight: 900; color: #c68a4c; letter-spacing: -0.5px; margin-bottom: 8px; text-transform: uppercase; }
+  .cover h2 { font-size: 22px; font-weight: 800; color: #d9b48f; margin-top: 10px; }
+  .cover .sub { font-size: 14px; color: #cca47c; margin-top: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+  .tags { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .tag {
+    background: #251814;
+    border: 1px solid #c68a4c;
+    color: #c68a4c;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .5px;
+  }
+
+  /* ── Section headers ── */
+  h1 {
+    font-size: 24px;
+    font-weight: 900;
+    color: #c68a4c;
+    padding: 14px 20px;
+    background: #1e1310;
+    border-left: 6px solid #c68a4c;
+    border-radius: 0 8px 8px 0;
+    margin: 44px 0 20px;
+    letter-spacing: -.3px;
+    text-transform: uppercase;
+  }
+  h2 {
+    font-size: 17px;
+    font-weight: 800;
+    color: #d9b48f;
+    margin: 28px 0 12px;
+    border-bottom: 2px solid #c68a4c44;
+    padding-bottom: 6px;
+  }
+  h3 {
+    font-size: 14px;
+    font-weight: 800;
+    color: #f4a261;
+    margin: 18px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+  }
+
+  p { margin: 12px 0; font-weight: 700; color: #eae0db; }
+  li { margin: 8px 0; font-weight: 700; }
+  ul, ol { padding-left: 24px; margin-bottom: 16px; }
+
+  strong { font-weight: 900; color: #ffffff; }
+
+  /* ── Image Display ── */
+  .screenshot-container {
+    background: #1e1310;
+    border: 2px solid #36251f;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 24px 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    page-break-inside: avoid;
+  }
+  .screenshot-container:hover {
+    border-color: #c68a4c;
+    box-shadow: 0 8px 32px rgba(198, 138, 76, 0.2);
+    transition: all 0.3s ease;
+  }
+  .screenshot-container img {
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid #36251f;
+    display: block;
+    margin: 0 auto 12px;
+  }
+  .screenshot-caption {
+    font-size: 13px;
+    color: #cca47c;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    border-top: 1px solid #251814;
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+  .screenshot-caption strong {
+    color: #c68a4c;
+  }
+
+  /* ── Snippet cards ── */
+  .snippet {
+    background: #1e1310;
+    border: 1px solid #36251f;
+    border-radius: 12px;
+    margin: 20px 0;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+  .snippet-header {
+    background: #251814;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #36251f;
+  }
+  .snippet-header .dots { display: flex; gap: 6px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+  .snippet-header .filename {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: #cca47c;
+    margin-left: 4px;
+  }
+  .lang-badge {
+    margin-left: auto;
+    background: #c68a4c22;
+    color: #c68a4c;
+    border: 1px solid #c68a4c44;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: .5px;
+  }
+
+  /* ── Code ── */
+  pre {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 18px 22px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #eae0db;
+    line-height: 1.7;
+    background: #1e1310;
+  }
+  .kw  { color: #df8a6c; font-weight: 800; } /* keywords */
+  .an  { color: #c68a4c; font-weight: 800; } /* annotations */
+  .str { color: #e9c46a; font-weight: 700; }  /* strings */
+  .cm  { color: #8c766c; font-style: italic; font-weight: 500; }/* comments */
+  .cls { color: #f4a261; font-weight: 800; } /* class names */
+  .met { color: #cca47c; font-weight: 700; } /* methods */
+  .num { color: #e6c594; font-weight: 700; }  /* numbers */
+  .vr  { color: #eae0db; }                    /* variables */
+
+  /* ── Callouts ── */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-weight: 800;
+    font-size: 13.5px;
+    border-left: 5px solid;
+    page-break-inside: avoid;
+  }
+  .callout.info  { background: #2a1e19; border-color: #c68a4c; color: #e6d8cf; }
+  .callout.warn  { background: #3a2c1a; border-color: #d29922; color: #ffa657; }
+  .callout.green { background: #132a1a; border-color: #3fb950; color: #56d364; }
+
+  code {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    background: #251814;
+    padding: 2px 7px;
+    border-radius: 5px;
+    color: #c68a4c;
+  }
+
+  /* ── Page break ── */
+  .page-break { page-break-after: always; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    color: #cca47c;
+    font-size: 12px;
+    font-weight: 800;
+    border-top: 2px solid #251814;
+    margin-top: 60px;
+    padding-top: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Animations */
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @media print {
+    body { padding: 24px 36px; background: #140d0b !important; -webkit-print-color-adjust: exact; }
+    .screenshot-container { page-break-inside: avoid; border: 2px solid #36251f !important; }
+    .snippet { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ COVER ═══ -->
+<div class="cover">
+  <div class="cover-icon">🧠</div>
+  <h1>Dil Sai Tadka</h1>
+  <h2>LLM AI Features Implementation Report</h2>
+  <div class="sub">University Submission Portfolio &nbsp;·&nbsp; Simple Academic Format</div>
+  <div class="tags">
+    <span class="tag">Spring Boot 3.2.4</span>
+    <span class="tag">React 18</span>
+    <span class="tag">Groq Llama 3 LLM</span>
+    <span class="tag">PostgreSQL</span>
+    <span class="tag">AI Chat completions</span>
+  </div>
+</div>
+
+<!-- ═══ SECTION 1 ═══ -->
+<h1>1. Introduction to LLM Integration</h1>
+<p>The <strong>Dil Sai Tadka</strong> platform integrates the <strong>Groq Llama 3 AI model</strong> (specifically <code>llama3-8b-8192</code>) to offer two core intelligent capabilities:</p>
+<ol>
+  <li><strong>Generative AI Review Summarizer:</strong> Consolidates quantitative and qualitative guest feedback (reviews and complaints) from the database into structured sentiment scores, summary paragraphs, list of strengths/complaints, and operational action points.</li>
+  <li><strong>Culinary AI Assistant:</strong> A gastronomy chatbot that reviews the hotel's current active menu items from the database and answers customer questions with matching food recommendations.</li>
+</ol>
+<p>Both tools leverage pre-designed system prompts to ensure outputs are concise and appropriate for hotel-restaurant operations.</p>
+
+<div class="page-break"></div>
+
+<!-- ═══ SECTION 2 ═══ -->
+<h1>2. Generative AI Review Summarizer</h1>
+<p>The **AI Review Summary** tab extracts real-time feedback insights to assist hotel management in evaluating operational quality.</p>
+
+<div class="screenshot-container">
+  <img src="review_summary.png" alt="AI Review Summary Screenshot" />
+  <div class="screenshot-caption"><strong>Figure 2.1:</strong> AI Review Summary sub-tab showcasing satisfaction ratings, generated summary insights, strengths, complaints, and recommendations.</div>
+</div>
+
+<h2>2.1 Explanation of Components in Figure 2.1</h2>
+<ul>
+  <li><strong>Guest Satisfaction Gauge (92%):</strong> A circular visualization mapped directly from the AI-calculated sentiment score (e.g., <code>0.88</code> out of <code>1.0</code> maps to 92% approval).</li>
+  <li><strong>Executive Summary Insight:</strong> A paragraph generated by the LLM summarizing the general sentiment of guests (praising dishes like Paneer Tadka, but highlighting minor weekend service delays).</li>
+  <li><strong>Key Strengths &amp; Active Complaints:</strong> Bullet points grouping positive items (flavor authenticity, pool ambiance, supportive staff) and customer issues (peak check-in delays, table availability).</li>
+  <li><strong>AI Operations Recommendations:</strong> Actionable suggestions generated by the AI to resolve the complaints (increasing peak-hour staffing, promoting check-out reservations, and welcome drinks).</li>
+</ul>
+
+<h2>2.2 Database Aggregation &amp; Prompt Context</h2>
+<p>When triggered, `AIInsightsService` aggregates all reviews and complaints into a structured JSON string. This JSON is injected into the LLM system prompt context. The prompt instructs the model to return a structured JSON response, which is then parsed by the backend to isolate metrics and save them to the `ai_insights` table in PostgreSQL.</p>
+
+<div class="page-break"></div>
+
+<!-- ═══ SECTION 3 ═══ -->
+<h1>3. Culinary AI Assistant (Chatbot Panel)</h1>
+<p>The **Culinary AI Assistant** sub-tab provides a chat window where customers or staff can query gastronomy advice.</p>
+
+<div class="screenshot-container">
+  <img src="culinary_assistant.png" alt="Culinary AI Assistant Screenshot" />
+  <div class="screenshot-caption"><strong>Figure 3.1:</strong> Culinary Assistant chatbot panel displaying active welcome prompts and chat interface.</div>
+</div>
+
+<h2>3.1 Explanation of Components in Figure 3.1</h2>
+<ul>
+  <li><strong>Gastronomy Chat Interface:</strong> Allows users to ask questions like <em>"What spicy vegetarian mains are available?"</em> or request staying combos.</li>
+  <li><strong>Menu Context Extraction:</strong> On receiving a chat query, the backend fetches all active dishes from the PostgreSQL database, formatting them as a text context array containing the item name, description, price, and category.</li>
+  <li><strong>System Prompt Binding:</strong> The backend combines the user query with the menu items in a system prompt, instructing the Llama 3 model to recommend specific dishes from the list and explain their flavor profiles using professional language.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<!-- ═══ SECTION 4 ═══ -->
+<h1>4. System Architecture Flow</h1>
+<p>The generative AI pipeline follows a linear data execution path as outlined below:</p>
+
+<div class="callout info">
+  <strong>Data Flow Pipeline:</strong><br/>
+  1. <strong>Database Extraction:</strong> Spring JPA repositories fetch active records (Reviews, Complaints, MenuItems).<br/>
+  2. <strong>Prompt Construction:</strong> Java context mapper builds the system prompt injecting JSON databases.<br/>
+  3. <strong>Groq API Call:</strong> Request sent using RestTemplate with bearer authentication (Llama 3 model).<br/>
+  4. <strong>JSON Parsing:</strong> Jackson ObjectMapper deserializes raw strings into structured fields.<br/>
+  5. <strong>PostgreSQL Storage:</strong> Results are cached inside the <code>ai_insights</code> table to ensure instant reload speeds.<br/>
+  6. <strong>React Display:</strong> Frontend renders clean charts, gauge indicators, and chatbot bubbles.
+</div>
+
+---
+
+<h1>5. Technical Implementation &amp; Backend Code</h1>
+
+<h2>5.1 AI Insights Generation Service</h2>
+<p>Pulls data, serializes JSON contexts, calls the Groq service, and saves parsed insights to the database.</p>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">AIInsightsService.java</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@Service</span>
+<span class="an">@RequiredArgsConstructor</span>
+<span class="kw">public class</span> <span class="cls">AIInsightsService</span> {
+
+    <span class="kw">private final</span> <span class="cls">ReviewRepository</span> reviewRepository;
+    <span class="kw">private final</span> <span class="cls">ComplaintRepository</span> complaintRepository;
+    <span class="kw">private final</span> <span class="cls">AiInsightRepository</span> aiInsightRepository;
+    <span class="kw">private final</span> <span class="cls">GroqService</span> groqService;
+    <span class="kw">private final</span> <span class="cls">ObjectMapper</span> objectMapper = <span class="kw">new</span> ObjectMapper();
+
+    <span class="kw">public</span> <span class="cls">AiInsight</span> <span class="met">generateAndSaveFeedbackSummary</span>() {
+        var reviews = reviewRepository.findAll();
+        var complaints = complaintRepository.findAll();
+
+        List&lt;Map&lt;String, Object&gt;&gt; reviewsData = reviews.stream()
+                .map(r -&gt; Map.of(<span class="str">"type"</span>, <span class="str">"Review"</span>, <span class="str">"rating"</span>, r.getRating(), <span class="str">"text"</span>, r.getText()))
+                .collect(Collectors.toList());
+
+        Map&lt;String, Object&gt; inputData = Map.of(<span class="str">"reviews"</span>, reviewsData, <span class="str">"complaints"</span>, complaints);
+        String jsonContext = objectMapper.writeValueAsString(inputData);
+
+        String prompt = PromptTemplates.getReviewSummaryPrompt(jsonContext);
+        String response = groqService.callGroq(prompt);
+
+        <span class="kw">double</span> sentimentScore = <span class="num">0.85</span>;
+        <span class="kw">try</span> {
+            String cleanedResponse = cleanMarkdown(response);
+            Map responseMap = objectMapper.readValue(cleanedResponse, Map.class);
+            sentimentScore = Double.parseDouble(responseMap.get(<span class="str">"sentimentScore"</span>).toString());
+            response = cleanedResponse;
+        } <span class="kw">catch</span> (Exception e) { }
+
+        <span class="cls">AiInsight</span> insight = <span class="cls">AiInsight</span>.builder()
+                .insightType(AiInsight.InsightType.FEEDBACK_SUMMARY)
+                .content(response)
+                .sentimentScore(sentimentScore)
+                .build();
+
+        <span class="kw">return</span> aiInsightRepository.save(insight);
+    }
+}</pre>
+</div>
+
+<div class="page-break"></div>
+
+<h2>5.2 AI Endpoint Rest Controller</h2>
+<p>Maps API endpoints to trigger summary updates or execute chatbot queries.</p>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">AIController.java</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@RestController</span>
+<span class="an">@RequestMapping</span>(<span class="str">"/api/ai"</span>)
+<span class="an">@RequiredArgsConstructor</span>
+<span class="kw">public class</span> <span class="cls">AIController</span> {
+
+    <span class="kw">private final</span> <span class="cls">AIInsightsService</span> aiInsightsService;
+    <span class="kw">private final</span> <span class="cls">MenuItemRepository</span> menuItemRepository;
+    <span class="kw">private final</span> <span class="cls">GroqService</span> groqService;
+    <span class="kw">private final</span> <span class="cls">ObjectMapper</span> objectMapper = <span class="kw">new</span> ObjectMapper();
+
+    <span class="an">@PostMapping</span>(<span class="str">"/reviews/summarize"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;<span class="cls">AiInsight</span>&gt; <span class="met">triggerFeedbackSummary</span>() {
+        <span class="kw">return</span> ResponseEntity.ok(aiInsightsService.generateAndSaveFeedbackSummary());
+    }
+
+    <span class="an">@PostMapping</span>(<span class="str">"/recommendations"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;Map&lt;String, String&gt;&gt; <span class="met">getMenuRecommendations</span>(@RequestBody Map&lt;String, String&gt; body) {
+        String query = body.get(<span class="str">"query"</span>);
+        var menuItems = menuItemRepository.findAll();
+        List&lt;Map&lt;String, Object&gt;&gt; menuSummary = menuItems.stream()
+                .filter(m -&gt; m.getActive() != <span class="kw">null</span> && m.getActive())
+                .map(m -&gt; Map.of(<span class="str">"name"</span>, m.getName(), <span class="str">"price"</span>, m.getPrice(), <span class="str">"category"</span>, m.getCategory()))
+                .collect(Collectors.toList());
+
+        String menuJson = objectMapper.writeValueAsString(menuSummary);
+        String prompt = PromptTemplates.getFoodRecommendationPrompt(menuJson, query);
+        String recommendation = groqService.callGroq(prompt);
+
+        <span class="kw">return</span> ResponseEntity.ok(Map.of(<span class="str">"recommendation"</span>, recommendation));
+    }
+}</pre>
+</div>
+
+<h2>5.3 Groq API Caller Service</h2>
+<p>Directly connects to Groq using the Llama 3 model, handling bearer keys and falling back cleanly if the key is missing.</p>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">GroqService.java</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@Service</span>
+<span class="kw">public class</span> <span class="cls">GroqService</span> {
+
+    <span class="an">@Value</span>(<span class="str">"${app.groq.api-key:NO_KEY}"</span>)
+    <span class="kw">private</span> String apiKey;
+    <span class="kw">private final</span> <span class="cls">RestTemplate</span> restTemplate = <span class="kw">new</span> RestTemplate();
+
+    <span class="kw">public</span> String <span class="met">callGroq</span>(String prompt) {
+        <span class="kw">if</span> (<span class="str">"NO_KEY"</span>.equals(apiKey) || apiKey.trim().isEmpty()) {
+            <span class="kw">return</span> <span class="met">generateFallbackResponse</span>(prompt);
+        }
+        
+        <span class="cls">HttpHeaders</span> headers = <span class="kw">new</span> HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(apiKey);
+
+        Map&lt;String, Object&gt; requestBody = Map.of(
+            <span class="str">"model"</span>, <span class="str">"llama3-8b-8192"</span>,
+            <span class="str">"messages"</span>, List.of(Map.of(<span class="str">"role"</span>, <span class="str">"user"</span>, <span class="str">"content"</span>, prompt)),
+            <span class="str">"temperature"</span>, <span class="num">0.3</span>
+        );
+
+        ResponseEntity&lt;Map&gt; resp = restTemplate.postForEntity(
+            <span class="str">"https://api.groq.com/openai/v1/chat/completions"</span>,
+            <span class="kw">new</span> HttpEntity&lt;&gt;(requestBody, headers), Map.class
+        );
+
+        List choices = (List) resp.getBody().get(<span class="str">"choices"</span>);
+        Map message = (Map) ((Map) choices.get(<span class="num">0</span>)).get(<span class="str">"message"</span>);
+        <span class="kw">return</span> (String) message.get(<span class="str">"content"</span>);
+    }
+}</pre>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="footer">
+  Dil Sai Tadka — Generative AI Features Implementation Report © 2026
+</div>
+
+</body>
+</html>

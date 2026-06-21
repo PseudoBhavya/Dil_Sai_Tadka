@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dil Sai Tadka — API Documentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #1a1a2e;
+    background: #fff;
+    padding: 48px 64px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    text-align: center;
+    padding: 60px 0 50px;
+    border-bottom: 3px solid #e8007d;
+    margin-bottom: 40px;
+  }
+  .cover h1 { font-size: 32px; font-weight: 700; color: #1a1a2e; }
+  .cover h2 { font-size: 18px; font-weight: 500; color: #e8007d; margin-top: 8px; }
+  .cover .meta { margin-top: 20px; font-size: 12px; color: #666; }
+  .cover .meta span { margin: 0 12px; }
+  .badge {
+    display: inline-block;
+    background: #e8007d;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin: 4px 3px;
+    letter-spacing: .4px;
+  }
+
+  /* ── TOC ── */
+  .toc { background: #f8f9fb; border-radius: 10px; padding: 24px 32px; margin-bottom: 40px; }
+  .toc h2 { font-size: 15px; font-weight: 700; color: #e8007d; margin-bottom: 12px; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 4px 0; font-size: 12.5px; }
+  .toc a { color: #1a1a2e; text-decoration: none; }
+  .toc a:hover { color: #e8007d; }
+
+  /* ── Sections ── */
+  h1 { font-size: 26px; font-weight: 700; color: #1a1a2e; margin: 36px 0 8px; border-bottom: 2px solid #e8007d; padding-bottom: 8px; }
+  h2 { font-size: 17px; font-weight: 700; color: #1a1a2e; margin: 30px 0 10px; }
+  h3 { font-size: 14px; font-weight: 600; margin: 22px 0 8px; }
+  p { margin: 8px 0; }
+
+  /* ── Endpoint cards ── */
+  .endpoint {
+    background: #f8f9fb;
+    border-left: 4px solid #e8007d;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    page-break-inside: avoid;
+  }
+  .endpoint-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .method {
+    display: inline-block;
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 5px;
+    min-width: 54px;
+    text-align: center;
+    letter-spacing: .5px;
+  }
+  .GET    { background: #d4edda; color: #155724; }
+  .POST   { background: #cce5ff; color: #004085; }
+  .PUT    { background: #fff3cd; color: #856404; }
+  .DELETE { background: #f8d7da; color: #721c24; }
+  .PATCH  { background: #e2d9f3; color: #4a2c9c; }
+
+  .url {
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+
+  .desc { font-size: 12.5px; color: #555; margin-bottom: 10px; }
+
+  /* ── Code blocks ── */
+  pre {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    font-family: 'Fira Code', monospace;
+    font-size: 11.5px;
+    border-radius: 7px;
+    padding: 14px 18px;
+    overflow-x: auto;
+    margin: 8px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  code {
+    font-family: 'Fira Code', monospace;
+    font-size: 11.5px;
+    background: #f0f0f5;
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  /* ── Tables ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 12.5px;
+  }
+  th {
+    background: #1a1a2e;
+    color: #fff;
+    font-weight: 600;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  td { padding: 7px 12px; border-bottom: 1px solid #eee; }
+  tr:nth-child(even) td { background: #f8f9fb; }
+
+  /* ── Notes / alerts ── */
+  .note {
+    background: #fff3cd;
+    border-left: 4px solid #f5a623;
+    border-radius: 6px;
+    padding: 10px 16px;
+    margin: 12px 0;
+    font-size: 12.5px;
+  }
+  .note strong { color: #b07d00; }
+  .info {
+    background: #cce5ff;
+    border-left: 4px solid #3a90e8;
+    border-radius: 6px;
+    padding: 10px 16px;
+    margin: 12px 0;
+    font-size: 12.5px;
+  }
+  .info strong { color: #004085; }
+
+  /* ── Page breaks ── */
+  .page-break { page-break-after: always; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    color: #aaa;
+    font-size: 11px;
+    border-top: 1px solid #eee;
+    margin-top: 50px;
+    padding-top: 16px;
+  }
+
+  @media print {
+    body { padding: 24px 40px; }
+    .endpoint { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ COVER ═══════════════════ -->
+<div class="cover">
+  <h1>🍛 Dil Sai Tadka</h1>
+  <h2>API Documentation</h2>
+  <div style="margin-top:16px;">
+    <span class="badge">Version 1.0.0</span>
+    <span class="badge">Spring Boot 3.2.4</span>
+    <span class="badge">REST/JSON</span>
+    <span class="badge">JWT Auth</span>
+  </div>
+  <div class="meta">
+    <span><strong>Base URL:</strong> http://localhost:8080</span>
+    <span><strong>Format:</strong> application/json</span>
+    <span><strong>Date:</strong> May 2026</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ TOC ═══════════════════ -->
+<div class="toc">
+  <h2>📋 Table of Contents</h2>
+  <ol>
+    <li><a href="#auth">Authentication</a></li>
+    <li><a href="#users">User Management (Admin)</a></li>
+    <li><a href="#partner">Partner API — Zomato / Swiggy Integration</a>
+      <ol>
+        <li>Listing Endpoints</li>
+        <li>Creating Endpoints</li>
+        <li>Updating Endpoints</li>
+        <li>Cancelling Endpoints</li>
+      </ol>
+    </li>
+    <li><a href="#menu">Menu Management</a></li>
+    <li><a href="#rooms">Room Management</a></li>
+    <li><a href="#orders">Orders</a></li>
+    <li><a href="#bookings">Bookings</a></li>
+    <li><a href="#analytics">Analytics &amp; Dashboard</a></li>
+    <li><a href="#ai">AI / Groq Integration</a></li>
+    <li><a href="#errors">Error Handling</a></li>
+    <li><a href="#glossary">Glossary</a></li>
+  </ol>
+</div>
+
+<!-- ═══════════════════ 1. AUTH ═══════════════════ -->
+<h1 id="auth">1. Authentication</h1>
+<div class="info"><strong>ℹ️ Note:</strong> All secured endpoints require the header: <code>Authorization: Bearer &lt;JWT_TOKEN&gt;</code></div>
+
+<div class="endpoint">
+  <div class="endpoint-title">
+    <span class="method POST">POST</span>
+    <span class="url">/api/auth/register</span>
+  </div>
+  <div class="desc">Register a new customer account. <strong>Access: Public</strong></div>
+  <h3>Request Body</h3>
+  <pre>{
+  "name": "Bhavya Pandey",
+  "email": "bhavya@example.com",
+  "password": "securePassword123",
+  "phone": "9876543210"
+}</pre>
+  <h3>Success — 201 Created</h3>
+  <pre>{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 1,
+    "name": "Bhavya Pandey",
+    "email": "bhavya@example.com",
+    "role": "ROLE_CUSTOMER"
+  }
+}</pre>
+  <h3>Error Responses</h3>
+  <table><tr><th>Status</th><th>Message</th></tr>
+    <tr><td>400</td><td>Email already registered</td></tr>
+    <tr><td>400</td><td>Missing required fields</td></tr>
+  </table>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title">
+    <span class="method POST">POST</span>
+    <span class="url">/api/auth/login</span>
+  </div>
+  <div class="desc">Login and obtain a JWT token. <strong>Access: Public</strong></div>
+  <h3>Request Body</h3>
+  <pre>{
+  "email": "bhavya@example.com",
+  "password": "securePassword123"
+}</pre>
+  <h3>Success — 200 OK</h3>
+  <pre>{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": { "id": 1, "name": "Bhavya Pandey", "email": "bhavya@example.com", "role": "ROLE_CUSTOMER" }
+}</pre>
+  <table><tr><th>Status</th><th>Message</th></tr>
+    <tr><td>401</td><td>Invalid email or password</td></tr>
+  </table>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════ 2. USERS ═══════════════════ -->
+<h1 id="users">2. User Management (Admin)</h1>
+<div class="note"><strong>⚠️ Security:</strong> All endpoints require <code>ROLE_ADMIN</code> JWT token.</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/users</span></div>
+  <div class="desc">Retrieve all registered users.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>[
+  { "id": 1, "name": "Admin User", "email": "admin@dilsaitadka.com", "role": "ROLE_ADMIN", "createdAt": "2024-01-01T00:00:00" },
+  { "id": 2, "name": "Customer", "email": "customer@dilsaitadka.com", "role": "ROLE_CUSTOMER", "createdAt": "2024-01-02T00:00:00" }
+]</pre>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/users/{id}</span></div>
+  <div class="desc">Retrieve a single user by ID.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>{ "id": 2, "name": "Customer", "email": "customer@dilsaitadka.com", "role": "ROLE_CUSTOMER" }</pre>
+  <table><tr><th>Status</th><th>Message</th></tr><tr><td>404</td><td>User not found</td></tr></table>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method PUT">PUT</span><span class="url">/api/users/{id}/role</span></div>
+  <div class="desc">Update a user's role.</div>
+  <h3>Request Body</h3>
+  <pre>{ "role": "ADMIN" }</pre>
+  <h3>Success — 200 OK</h3>
+  <pre>{ "id": 2, "name": "Customer", "email": "customer@dilsaitadka.com", "role": "ROLE_ADMIN" }</pre>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method DELETE">DELETE</span><span class="url">/api/users/{id}</span></div>
+  <div class="desc">Delete a user account. <strong>Success: 204 No Content</strong></div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════ 3. PARTNER ═══════════════════ -->
+<h1 id="partner">3. Partner API — Zomato / Swiggy Integration</h1>
+<div class="info">
+  <strong>ℹ️ Authentication:</strong> All <code>/api/partner/**</code> endpoints require the header:<br>
+  <code>X-Partner-Key: &lt;YOUR_PARTNER_API_KEY&gt;</code><br><br>
+  <strong>Rate Limit:</strong> 60 requests / minute per partner key. Exceeding returns <code>429 Too Many Requests</code>.
+</div>
+
+<h2>3.1 Listing Endpoints</h2>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/partner/restaurants</span></div>
+  <div class="desc">List all registered partner restaurants.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>[{ "id": 1, "name": "Dil Sai Tadka Main", "cuisineType": "North Indian", "address": "123 MG Road, Bangalore", "rating": 4.8, "active": true }]</pre>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/partner/menu</span></div>
+  <div class="desc">List all active menu items.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>[
+  { "id": 1, "name": "Dal Makhani", "description": "Creamy black lentils slow cooked overnight", "price": 320.0, "category": "Main Course", "tag": "VEG", "active": true },
+  { "id": 2, "name": "Butter Chicken", "description": "Tender chicken in rich tomato-butter gravy", "price": 450.0, "category": "Main Course", "tag": "NON_VEG", "active": true }
+]</pre>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/partner/orders</span></div>
+  <div class="desc">List all orders placed through the platform.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>[{
+  "id": 101, "userEmail": "customer@dilsaitadka.com", "totalAmount": 770.0, "status": "CONFIRMED",
+  "items": [
+    { "menuItemId": 1, "menuItemName": "Dal Makhani", "quantity": 1, "price": 320.0 },
+    { "menuItemId": 2, "menuItemName": "Butter Chicken", "quantity": 1, "price": 450.0 }
+  ]
+}]</pre>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/partner/bookings</span></div>
+  <div class="desc">List all lodging bookings.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>[{ "id": 55, "userEmail": "customer@dilsaitadka.com", "roomId": 3, "roomName": "Deluxe Suite",
+  "checkIn": "2024-06-01", "checkOut": "2024-06-05", "guests": 2, "totalAmount": 12000.0, "status": "CONFIRMED" }]</pre>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/partner/rooms</span></div>
+  <div class="desc">List all available rooms / lodging units.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>[{ "id": 3, "name": "Deluxe Suite", "description": "Spacious suite with city view", "pricePerNight": 3000.0, "capacity": 2, "available": true }]</pre>
+</div>
+
+<div class="page-break"></div>
+
+<h2>3.2 Creating Endpoints</h2>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method POST">POST</span><span class="url">/api/partner/restaurants</span></div>
+  <div class="desc">Register a new partner restaurant.</div>
+  <h3>Request Body</h3>
+  <pre>{ "name": "Swiggy Cloud Kitchen", "cuisineType": "Multi-Cuisine", "address": "456 Indiranagar, Bangalore", "rating": 4.5 }</pre>
+  <h3>Success — 201 Created</h3>
+  <pre>{ "id": 10, "name": "Swiggy Cloud Kitchen", "cuisineType": "Multi-Cuisine", "address": "456 Indiranagar, Bangalore", "rating": 4.5, "active": true }</pre>
+  <table><tr><th>Status</th><th>Message</th></tr><tr><td>400</td><td>Restaurant name is required</td></tr></table>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method POST">POST</span><span class="url">/api/partner/orders</span></div>
+  <div class="desc">Place a new food order via partner platform.</div>
+  <h3>Request Body</h3>
+  <pre>{
+  "userEmail": "customer@zomato.com",
+  "items": [
+    { "menuItemId": 1, "quantity": 2, "price": 320.0 },
+    { "menuItemId": 2, "quantity": 1, "price": 450.0 }
+  ]
+}</pre>
+  <h3>Success — 201 Created</h3>
+  <pre>{ "id": 102, "userEmail": "customer@zomato.com", "totalAmount": 1090.0, "status": "PENDING",
+  "items": [
+    { "menuItemId": 1, "menuItemName": "Dal Makhani", "quantity": 2, "price": 320.0 },
+    { "menuItemId": 2, "menuItemName": "Butter Chicken", "quantity": 1, "price": 450.0 }
+  ]
+}</pre>
+  <table><tr><th>Status</th><th>Message</th></tr>
+    <tr><td>400</td><td>User email and items list are required</td></tr>
+    <tr><td>500</td><td>Menu item not found for ID: {id}</td></tr>
+  </table>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method POST">POST</span><span class="url">/api/partner/bookings</span></div>
+  <div class="desc">Create a new room booking via partner platform.</div>
+  <h3>Request Body</h3>
+  <pre>{ "userEmail": "guest@airbnb.com", "roomId": 3, "checkIn": "2024-07-01", "checkOut": "2024-07-05", "guests": 2, "totalAmount": 12000.0 }</pre>
+  <h3>Success — 201 Created</h3>
+  <pre>{ "id": 56, "userEmail": "guest@airbnb.com", "roomId": 3, "roomName": "Deluxe Suite",
+  "checkIn": "2024-07-01", "checkOut": "2024-07-05", "guests": 2, "totalAmount": 12000.0, "status": "CONFIRMED" }</pre>
+  <table><tr><th>Status</th><th>Message</th></tr>
+    <tr><td>400</td><td>userEmail, roomId, checkIn, and checkOut are required</td></tr>
+    <tr><td>500</td><td>Room not found for ID: {id}</td></tr>
+  </table>
+</div>
+
+<div class="page-break"></div>
+
+<h2>3.3 Updating Endpoints</h2>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method PUT">PUT</span><span class="url">/api/partner/orders/{id}</span></div>
+  <div class="desc">Update an existing order's status or total amount.</div>
+  <h3>Request Body</h3>
+  <pre>{ "status": "CONFIRMED", "totalAmount": 1090.0 }</pre>
+  <h3>Success — 200 OK</h3>
+  <pre>{ "id": 102, "status": "CONFIRMED", "totalAmount": 1090.0 }</pre>
+  <table><tr><th>Status</th><th>Message</th></tr><tr><td>404</td><td>Order not found</td></tr></table>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method PUT">PUT</span><span class="url">/api/partner/bookings/{id}</span></div>
+  <div class="desc">Update a booking's dates, guests, status or amount.</div>
+  <h3>Request Body</h3>
+  <pre>{ "checkIn": "2024-07-02", "checkOut": "2024-07-06", "guests": 3, "status": "CONFIRMED", "totalAmount": 15000.0 }</pre>
+  <h3>Success — 200 OK</h3>
+  <pre>{ "id": 56, "checkIn": "2024-07-02", "checkOut": "2024-07-06", "guests": 3, "totalAmount": 15000.0, "status": "CONFIRMED" }</pre>
+  <table><tr><th>Status</th><th>Message</th></tr><tr><td>404</td><td>Booking not found</td></tr></table>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method PUT">PUT</span><span class="url">/api/partner/menu/{id}</span></div>
+  <div class="desc">Update a menu item's details (price, availability, description, etc.)</div>
+  <h3>Request Body</h3>
+  <pre>{ "name": "Dal Makhani Special", "price": 350.0, "active": true }</pre>
+  <h3>Success — 200 OK</h3>
+  <pre>{ "id": 1, "name": "Dal Makhani Special", "price": 350.0, "active": true }</pre>
+  <table><tr><th>Status</th><th>Message</th></tr><tr><td>404</td><td>Menu item not found</td></tr></table>
+</div>
+
+<h2>3.4 Cancelling Endpoints</h2>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method PATCH">PATCH</span><span class="url">/api/partner/orders/{id}/cancel</span></div>
+  <div class="desc">Cancel an existing order.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>{ "message": "Order cancelled successfully" }</pre>
+  <table><tr><th>Status</th><th>Message</th></tr><tr><td>404</td><td>Order not found</td></tr></table>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method PATCH">PATCH</span><span class="url">/api/partner/bookings/{id}/cancel</span></div>
+  <div class="desc">Cancel an existing room booking.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>{ "message": "Booking cancelled successfully" }</pre>
+  <table><tr><th>Status</th><th>Message</th></tr><tr><td>404</td><td>Booking not found</td></tr></table>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════ 4. MENU ═══════════════════ -->
+<h1 id="menu">4. Menu Management</h1>
+<div class="info"><strong>ℹ️</strong> GET endpoints are public. POST/PUT/DELETE require <code>ROLE_ADMIN</code>.</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/menu</span></div>
+  <div class="desc">Retrieve all menu items. <strong>Access: Public</strong></div>
+</div>
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/menu/search?query={term}</span></div>
+  <div class="desc">Search menu items by name or description. <strong>Access: Public</strong></div>
+</div>
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/menu/categories</span></div>
+  <div class="desc">Retrieve all distinct menu categories.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>["Starter", "Main Course", "Dessert", "Beverages"]</pre>
+</div>
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method POST">POST</span><span class="url">/api/menu</span></div>
+  <div class="desc">Create a new menu item. <strong>Admin only</strong></div>
+</div>
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method PUT">PUT</span><span class="url">/api/menu/{id}</span></div>
+  <div class="desc">Update an existing menu item. <strong>Admin only</strong></div>
+</div>
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method DELETE">DELETE</span><span class="url">/api/menu/{id}</span></div>
+  <div class="desc">Delete a menu item. <strong>Admin only</strong></div>
+</div>
+
+<!-- ═══════════════════ 5. ROOMS ═══════════════════ -->
+<h1 id="rooms">5. Room Management</h1>
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/rooms</span></div>
+  <div class="desc">Retrieve all rooms / lodging units. <strong>Access: Public</strong></div>
+</div>
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/rooms/{id}</span></div>
+  <div class="desc">Retrieve a specific room by ID. <strong>Access: Public</strong></div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════ 6. ORDERS ═══════════════════ -->
+<h1 id="orders">6. Orders</h1>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/orders</span></div>
+  <div class="desc">List all orders sorted by most recent. <strong>Admin only</strong></div>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/orders/my</span></div>
+  <div class="desc">List orders placed by the currently logged-in user. <strong>Authenticated User</strong></div>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method POST">POST</span><span class="url">/api/orders</span></div>
+  <div class="desc">Place a new food order. <strong>Authenticated User</strong></div>
+  <h3>Request Body</h3>
+  <pre>{ "total": 770.0, "items": [{ "id": 1, "quantity": 1, "price": 320.0 }, { "id": 2, "quantity": 1, "price": 450.0 }] }</pre>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method PUT">PUT</span><span class="url">/api/orders/{id}/status</span></div>
+  <div class="desc">Update the status of an order. <strong>Admin only</strong></div>
+  <h3>Request Body</h3>
+  <pre>{ "status": "CONFIRMED" }</pre>
+  <p><strong>Valid Statuses:</strong> <code>PENDING</code>, <code>CONFIRMED</code>, <code>PREPARING</code>, <code>DELIVERED</code>, <code>CANCELLED</code></p>
+</div>
+
+<!-- ═══════════════════ 7. BOOKINGS ═══════════════════ -->
+<h1 id="bookings">7. Bookings</h1>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/bookings</span></div>
+  <div class="desc">List all bookings sorted by most recent. <strong>Admin only</strong></div>
+</div>
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/bookings/my</span></div>
+  <div class="desc">List bookings made by the currently logged-in user.</div>
+</div>
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method POST">POST</span><span class="url">/api/bookings</span></div>
+  <div class="desc">Create a new room booking. <strong>Authenticated User</strong></div>
+  <h3>Request Body</h3>
+  <pre>{ "roomId": 3, "checkIn": "2024-07-01", "checkOut": "2024-07-05", "guests": 2, "total": 12000.0 }</pre>
+</div>
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method PUT">PUT</span><span class="url">/api/bookings/{id}/status</span></div>
+  <div class="desc">Update the status of a booking. <strong>Admin only</strong></div>
+  <h3>Request Body</h3>
+  <pre>{ "status": "CONFIRMED" }</pre>
+  <p><strong>Valid Statuses:</strong> <code>PENDING</code>, <code>CONFIRMED</code>, <code>CANCELLED</code></p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════ 8. ANALYTICS ═══════════════════ -->
+<h1 id="analytics">8. Analytics &amp; Dashboard</h1>
+<div class="note"><strong>⚠️ Security:</strong> All dashboard endpoints require <code>ROLE_ADMIN</code> JWT token.</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/dashboard/stats</span></div>
+  <div class="desc">Returns key platform statistics.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>{ "totalOrders": 245, "totalBookings": 89, "totalMenuItems": 42, "totalRooms": 15, "totalUsers": 312, "totalReviews": 178 }</pre>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/dashboard/revenue</span></div>
+  <div class="desc">Returns monthly revenue aggregated from all orders.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>{ "monthlyRevenue": { "2024-01": 45200.0, "2024-02": 52100.0, "2024-03": 61800.0, "2024-04": 70500.0, "2024-05": 83200.0 } }</pre>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/dashboard/recent-orders</span></div>
+  <div class="desc">Returns the 10 most recent orders.</div>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/dashboard/recent-bookings</span></div>
+  <div class="desc">Returns the 10 most recent bookings.</div>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/analytics/metrics</span></div>
+  <div class="desc">Returns detailed API usage metrics per partner.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>{
+  "totalRequests": 1523, "successfulRequests": 1489, "failedRequests": 34, "averageResponseTime": 142,
+  "topEndpoints": [
+    { "endpoint": "/api/partner/orders", "count": 520 },
+    { "endpoint": "/api/partner/menu", "count": 412 }
+  ],
+  "partnerActivity": [
+    { "partnerName": "Zomato", "requestCount": 720 },
+    { "partnerName": "Swiggy", "requestCount": 580 },
+    { "partnerName": "Airbnb", "requestCount": 223 }
+  ]
+}</pre>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/analytics/logs</span></div>
+  <div class="desc">Returns the last 100 raw API usage log entries.</div>
+  <h3>Success — 200 OK</h3>
+  <pre>[{ "id": 1, "partnerName": "Zomato", "endpoint": "/api/partner/orders", "method": "POST",
+  "statusCode": 201, "responseTimeMs": 98, "timestamp": "2024-05-28T14:30:00" }]</pre>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══════════════════ 9. AI ═══════════════════ -->
+<h1 id="ai">9. AI / Groq Integration</h1>
+<div class="info"><strong>ℹ️ Engine:</strong> Powered by Groq's <code>llama3-8b-8192</code> model. If the Groq API key is not configured, cinematic local fallback responses are returned automatically.</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method GET">GET</span><span class="url">/api/ai/feedback</span></div>
+  <div class="desc">Generates an AI-powered sentiment analysis summary from all customer reviews &amp; complaints. <strong>Admin JWT required</strong></div>
+  <h3>Success — 200 OK</h3>
+  <pre>{
+  "summary": "Customers are highly satisfied with the ambiance and food quality...",
+  "satisfactionPercentage": 92,
+  "strengths": ["Excellent food quality", "Responsive staff", "Clean rooms"],
+  "complaints": ["Occasional delays during peak hours", "Parking availability"],
+  "recommendations": "Focus on improving peak-hour order management.",
+  "generatedAt": "2024-05-28T14:30:00"
+}</pre>
+</div>
+
+<div class="endpoint">
+  <div class="endpoint-title"><span class="method POST">POST</span><span class="url">/api/ai/chat</span></div>
+  <div class="desc">Send a message to the AI Culinary Assistant. <strong>Any authenticated user</strong></div>
+  <h3>Request Body</h3>
+  <pre>{ "message": "What would you recommend for a vegetarian dinner for two?" }</pre>
+  <h3>Success — 200 OK</h3>
+  <pre>{ "response": "For a romantic vegetarian dinner for two, I'd recommend starting with our **Paneer Tikka** (₹280) followed by the rich **Dal Makhani** (₹320) paired with **Butter Naan** (₹60)..." }</pre>
+</div>
+
+<!-- ═══════════════════ 10. ERRORS ═══════════════════ -->
+<h1 id="errors">10. Error Handling</h1>
+<p>All errors are returned as structured JSON:</p>
+<pre>{ "error": "Description of what went wrong", "status": 404 }</pre>
+
+<table>
+  <tr><th>Status Code</th><th>Meaning</th></tr>
+  <tr><td>400</td><td>Bad Request — Missing or invalid fields</td></tr>
+  <tr><td>401</td><td>Unauthorized — Invalid or missing JWT token</td></tr>
+  <tr><td>403</td><td>Forbidden — Insufficient role / permissions</td></tr>
+  <tr><td>404</td><td>Not Found — Resource does not exist</td></tr>
+  <tr><td>429</td><td>Too Many Requests — Partner rate limit exceeded (60/min)</td></tr>
+  <tr><td>500</td><td>Internal Server Error — Unexpected server error</td></tr>
+</table>
+
+<!-- ═══════════════════ 11. GLOSSARY ═══════════════════ -->
+<h1 id="glossary">11. Glossary</h1>
+<table>
+  <tr><th>Term</th><th>Definition</th></tr>
+  <tr><td><strong>JWT</strong></td><td>JSON Web Token used for stateless authentication</td></tr>
+  <tr><td><strong>Partner Key</strong></td><td>UUID-based API key issued to third-party partners (Zomato, Swiggy, Airbnb)</td></tr>
+  <tr><td><strong>ROLE_ADMIN</strong></td><td>Superuser role with full platform access</td></tr>
+  <tr><td><strong>ROLE_CUSTOMER</strong></td><td>Standard user role for ordering and booking</td></tr>
+  <tr><td><strong>Order</strong></td><td>A food order placed by a customer through the platform</td></tr>
+  <tr><td><strong>Booking</strong></td><td>A lodging/room reservation placed by a customer</td></tr>
+  <tr><td><strong>PartnerRestaurant</strong></td><td>A restaurant entity registered and managed by a third-party partner</td></tr>
+  <tr><td><strong>AiInsight</strong></td><td>Stored result of a Groq LLM analysis run on platform reviews</td></tr>
+  <tr><td><strong>ApiUsageLog</strong></td><td>A database record capturing each API call made by a partner</td></tr>
+</table>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<div class="footer">
+  © 2024 Dil Sai Tadka — Premium Lodgings &amp; Restaurant Management System &nbsp;|&nbsp;
+  Version 1.0.0 &nbsp;|&nbsp; Spring Boot 3.2.4 + React 18 + PostgreSQL + Groq AI
+</div>
+
+</body>
+</html>

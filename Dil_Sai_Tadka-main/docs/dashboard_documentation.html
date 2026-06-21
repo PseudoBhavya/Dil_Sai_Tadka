@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dil Sai Tadka — Dashboard Explanation & Implementation Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700; /* Bold text by default */
+    background: #140d0b; /* Espresso dark background */
+    color: #eae0db; /* Creamy off-white text */
+    padding: 48px 60px;
+    max-width: 1000px;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    background: linear-gradient(135deg, #1e1310 0%, #251814 60%, #140d0b 100%);
+    border: 2px solid #c68a4c; /* Warm copper-brown border */
+    border-radius: 16px;
+    padding: 56px 48px;
+    text-align: center;
+    margin-bottom: 48px;
+    box-shadow: 0 8px 32px rgba(198, 138, 76, 0.15);
+  }
+  .cover-icon { font-size: 56px; margin-bottom: 16px; animation: bounce 2s infinite; }
+  .cover h1 { font-size: 38px; font-weight: 900; color: #c68a4c; letter-spacing: -0.5px; margin-bottom: 8px; text-transform: uppercase; }
+  .cover h2 { font-size: 22px; font-weight: 800; color: #d9b48f; margin-top: 10px; }
+  .cover .sub { font-size: 14px; color: #cca47c; margin-top: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+  .tags { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .tag {
+    background: #251814;
+    border: 1px solid #c68a4c;
+    color: #c68a4c;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .5px;
+  }
+
+  /* ── Section headers ── */
+  h1 {
+    font-size: 24px;
+    font-weight: 900;
+    color: #c68a4c;
+    padding: 14px 20px;
+    background: #1e1310;
+    border-left: 6px solid #c68a4c;
+    border-radius: 0 8px 8px 0;
+    margin: 44px 0 20px;
+    letter-spacing: -.3px;
+    text-transform: uppercase;
+  }
+  h2 {
+    font-size: 17px;
+    font-weight: 800;
+    color: #d9b48f;
+    margin: 28px 0 12px;
+    border-bottom: 2px solid #c68a4c44;
+    padding-bottom: 6px;
+  }
+  h3 {
+    font-size: 14px;
+    font-weight: 800;
+    color: #f4a261;
+    margin: 18px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+  }
+
+  p { margin: 12px 0; font-weight: 700; color: #eae0db; }
+  li { margin: 8px 0; font-weight: 700; }
+  ul, ol { padding-left: 24px; margin-bottom: 16px; }
+
+  strong { font-weight: 900; color: #ffffff; }
+
+  /* ── Image Display ── */
+  .screenshot-container {
+    background: #1e1310;
+    border: 2px solid #36251f;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 24px 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    page-break-inside: avoid;
+  }
+  .screenshot-container:hover {
+    border-color: #c68a4c;
+    box-shadow: 0 8px 32px rgba(198, 138, 76, 0.2);
+    transition: all 0.3s ease;
+  }
+  .screenshot-container img {
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid #36251f;
+    display: block;
+    margin: 0 auto 12px;
+  }
+  .screenshot-caption {
+    font-size: 13px;
+    color: #cca47c;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    border-top: 1px solid #251814;
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+  .screenshot-caption strong {
+    color: #c68a4c;
+  }
+
+  /* ── Snippet cards ── */
+  .snippet {
+    background: #1e1310;
+    border: 1px solid #36251f;
+    border-radius: 12px;
+    margin: 20px 0;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+  .snippet-header {
+    background: #251814;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #36251f;
+  }
+  .snippet-header .dots { display: flex; gap: 6px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+  .snippet-header .filename {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: #cca47c;
+    margin-left: 4px;
+  }
+  .lang-badge {
+    margin-left: auto;
+    background: #c68a4c22;
+    color: #c68a4c;
+    border: 1px solid #c68a4c44;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: .5px;
+  }
+
+  /* ── Code ── */
+  pre {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 18px 22px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #eae0db;
+    line-height: 1.7;
+    background: #1e1310;
+  }
+  .kw  { color: #df8a6c; font-weight: 800; } /* keywords */
+  .an  { color: #c68a4c; font-weight: 800; } /* annotations */
+  .str { color: #e9c46a; font-weight: 700; }  /* strings */
+  .cm  { color: #8c766c; font-style: italic; font-weight: 500; }/* comments */
+  .cls { color: #f4a261; font-weight: 800; } /* class names */
+  .met { color: #cca47c; font-weight: 700; } /* methods */
+  .num { color: #e6c594; font-weight: 700; }  /* numbers */
+  .vr  { color: #eae0db; }                    /* variables */
+
+  /* ── Callouts ── */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-weight: 800;
+    font-size: 13.5px;
+    border-left: 5px solid;
+    page-break-inside: avoid;
+  }
+  .callout.info  { background: #2a1e19; border-color: #c68a4c; color: #e6d8cf; }
+  .callout.warn  { background: #3a2c1a; border-color: #d29922; color: #ffa657; }
+  .callout.green { background: #132a1a; border-color: #3fb950; color: #56d364; }
+
+  code {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    background: #251814;
+    padding: 2px 7px;
+    border-radius: 5px;
+    color: #c68a4c;
+  }
+
+  /* ── Page break ── */
+  .page-break { page-break-after: always; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    color: #cca47c;
+    font-size: 12px;
+    font-weight: 800;
+    border-top: 2px solid #251814;
+    margin-top: 60px;
+    padding-top: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Animations */
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @media print {
+    body { padding: 24px 36px; background: #140d0b !important; -webkit-print-color-adjust: exact; }
+    .screenshot-container { page-break-inside: avoid; border: 2px solid #36251f !important; }
+    .snippet { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ COVER ═══ -->
+<div class="cover">
+  <div class="cover-icon">🍛</div>
+  <h1>Dil Sai Tadka</h1>
+  <h2>Dashboard Operational &amp; Technical Explanation</h2>
+  <div class="sub">University Submission Portfolio &nbsp;·&nbsp; Simple Academic Format</div>
+  <div class="tags">
+    <span class="tag">Spring Boot 3.2.4</span>
+    <span class="tag">React 18</span>
+    <span class="tag">PostgreSQL</span>
+    <span class="tag">Groq AI</span>
+    <span class="tag">Recharts Graphs</span>
+  </div>
+</div>
+
+<!-- ═══ SECTION 1 ═══ -->
+<h1>1. Project Introduction</h1>
+<p><strong>Dil Sai Tadka</strong> is a lodgings and restaurant management platform. The application provides two main management panels:</p>
+<ul>
+  <li><strong>Overview (Hotel &amp; Restaurant Operations):</strong> Used by managers to supervise hotel occupancy, track restaurant ordering activity, view weekly revenue charts, and review recent guest check-ins.</li>
+  <li><strong>API &amp; AI Ecosystem (Developer Analytics):</strong> Used by system administrators to manage third-party API connections (Zomato, Swiggy, and Airbnb), monitor response times, analyze customer feedback with AI sentiment tools, and interact with a culinary assistant chatbot.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<!-- ═══ SECTION 2 ═══ -->
+<h1>2. Administrative Dashboard (Overview tab)</h1>
+<p>The <strong>Overview Dashboard</strong> provides an immediate summary of hotel and restaurant metrics for management staff.</p>
+
+<div class="screenshot-container">
+  <img src="overview_dashboard.png" alt="Admin Dashboard Overview Screenshot" />
+  <div class="screenshot-caption"><strong>Figure 2.1:</strong> Admin Dashboard showing metrics cards, weekly revenue overview, recent order lists, booking details, and guest review listings.</div>
+</div>
+
+<h2>2.1 Explanation of Components in Figure 2.1</h2>
+<ul>
+  <li><strong>Metric Cards:</strong> Four key indicators representing real-time database totals:
+    <ul>
+      <li><strong>Total Revenue (₹1,42,850):</strong> The total financial turnover calculated from lodgings and restaurant sales.</li>
+      <li><strong>Active Orders (38):</strong> The number of restaurant food orders currently being processed.</li>
+      <li><strong>Occupancy (84%):</strong> The percentage of active hotel rooms occupied by checked-in guests.</li>
+      <li><strong>Guest Rating (4.9 / 5.0):</strong> The average score extracted from customer reviews.</li>
+    </ul>
+  </li>
+  <li><strong>Revenue Overview Chart:</strong> A bar graph displaying revenue distributions from Monday to Sunday, indicating active business levels throughout the week.</li>
+  <li><strong>Recent Orders Sidebar:</strong> Lists the latest food requests with details, such as <em>Paneer Tikka Platter (₹540)</em> at Table 04, <em>Artisan Cold Brew (₹220)</em> in Room 102, and <em>Gourmet Breakfast Box (₹850)</em>.</li>
+  <li><strong>Booking Status &amp; Guest Experiences:</strong> Sections tracking live check-in arrivals, departures, and showing active guest feedback quotes.</li>
+</ul>
+
+<h2>2.2 Implementation</h2>
+<p>The React frontend component <code>AdminDashboard.jsx</code> fetches these details on mounting. It calls <code>/api/dashboard/stats</code> to load the metric counters, <code>/api/dashboard/revenue</code> to render the bar chart, and <code>/api/dashboard/recent-orders</code> to display the recent items table.</p>
+
+<div class="page-break"></div>
+
+<!-- ═══ SECTION 3 ═══ -->
+<h1>3. API &amp; AI Ecosystem Portal</h1>
+<p>The <strong>API &amp; AI Ecosystem Dashboard</strong> coordinates developer-level partner APIs and displays AI insights. It is structured into three sub-tabs:</p>
+
+<h2>3.1 Sub-tab 1: Developer Analytics</h2>
+<p>This tab monitors external integration gateways (e.g. Swiggy, Zomato, and Airbnb) and traces operational statistics.</p>
+
+<div class="screenshot-container">
+  <img src="developer_analytics.png" alt="Developer Analytics Screenshot" />
+  <div class="screenshot-caption"><strong>Figure 3.1:</strong> Developer Analytics tab displaying API metrics, platform traffic distribution graph, and top endpoint donut chart.</div>
+</div>
+
+<p>Figure 3.1 demonstrates real-time developer statistics:</p>
+<ul>
+  <li><strong>API Metrics:</strong> Displays <em>Total API Calls (7)</em>, <em>Successful Requests (6)</em>, <em>Failed Requests (1)</em>, <em>Average Latency (112 ms)</em>, and <em>Partner Systems (4)</em>.</li>
+  <li><strong>Platform Traffic Distribution Chart:</strong> A smooth area chart displaying total partner gateway traffic over weekly timelines.</li>
+  <li><strong>Top Endpoint Traffic Donut:</strong> A pie chart displaying the exact count splits of resource demands (Orders: 60, Menu: 60, Rooms: 50, Restaurants: 50 calls).</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2>3.2 Sub-tab 1 Extra: Partner API Key Manager</h2>
+<p>Scroll down on the Developer Analytics tab to view partner credentials management and aggregator call volume charts.</p>
+
+<div class="screenshot-container">
+  <img src="key_manager.png" alt="Partner Key Manager Screenshot" />
+  <div class="screenshot-caption"><strong>Figure 3.2:</strong> Partner API Key Manager and Partner Traffic Volume bar chart.</div>
+</div>
+
+<ul>
+  <li><strong>API Key Manager:</strong> Allows administrators to type a partner name (e.g. <code>Zomato Partner</code>) and generate secure API keys to integrate external platforms. It includes active indicators and copy-to-clipboard utilities.</li>
+  <li><strong>Partner Traffic Volume:</strong> A bar chart comparing total incoming call requests across integrated aggregator networks (Zomato Partner, Airbnb Bookings, Swiggy Merchant).</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2>3.3 Sub-tab 2: AI Review Summary</h2>
+<p>This sub-tab visualizes reviews analyzed by the <strong>Groq Llama 3 LLM</strong>.</p>
+
+<div class="screenshot-container">
+  <img src="review_summary.png" alt="AI Review Summary Screenshot" />
+  <div class="screenshot-caption"><strong>Figure 3.3:</strong> AI Review Summary panel demonstrating satisfaction rating, generative summaries, extracted strengths/complaints, and operational recommendations.</div>
+</div>
+
+<ul>
+  <li><strong>Guest Satisfaction (92%):</strong> Renders a circular gauge calculated from active feedback sentiment.</li>
+  <li><strong>Executive Summary Insight:</strong> Generates a brief operational review paragraph highlighting guest reactions (e.g. praising Paneer Tadka and ambiance, while noting peak weekend service delays).</li>
+  <li><strong>Key Strengths &amp; Active Complaints:</strong> Groups guest feedback into bullet points (such as room service delays or table availability).</li>
+  <li><strong>AI Operations Recommendations:</strong> Generates immediate business solutions to resolve complaints (e.g. peak hour scheduling, pre-check bookings, welcome herbal tea).</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2>3.4 Sub-tab 3: Culinary AI Assistant</h2>
+<p>An interactive chatbot interface utilizing <strong>Groq chat completions</strong> to assist users with recipe recommendations.</p>
+
+<div class="screenshot-container">
+  <img src="culinary_assistant.png" alt="Culinary AI Assistant Chat Screenshot" />
+  <div class="screenshot-caption"><strong>Figure 3.4:</strong> Culinary Assistant chatbot panel where users interact with the Gastronomy AI.</div>
+</div>
+
+<p>The chatbot loads all active menu items and pricing from the database, injecting them into the system prompt context. Users can ask for vegetarian recommendations, stays dining combos, and pairings. The chatbot replies in plain text with customized suggestions.</p>
+
+<div class="page-break"></div>
+
+<!-- ═══ SECTION 4 ═══ -->
+<h1>4. Code Implementation Deep-Dive</h1>
+<p>This section outlines the backend code driving the dashboards and API gateways.</p>
+
+<h2>4.1 Dashboard Endpoint Controller</h2>
+<p>Exposes general lodging statistics, recent bookings, recent orders, and computes monthly revenue aggregates.</p>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">DashboardController.java</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@RestController</span>
+<span class="an">@RequestMapping</span>(<span class="str">"/api/dashboard"</span>)
+<span class="an">@RequiredArgsConstructor</span>
+<span class="kw">public class</span> <span class="cls">DashboardController</span> {
+
+    <span class="kw">private final</span> <span class="cls">OrderRepository</span> orderRepository;
+    <span class="kw">private final</span> <span class="cls">BookingRepository</span> bookingRepository;
+    <span class="kw">private final</span> <span class="cls">MenuItemRepository</span> menuItemRepository;
+    <span class="kw">private final</span> <span class="cls">RoomRepository</span> roomRepository;
+    <span class="kw">private final</span> <span class="cls">UserRepository</span> userRepository;
+    <span class="kw">private final</span> <span class="cls">ReviewRepository</span> reviewRepository;
+
+    <span class="an">@GetMapping</span>(<span class="str">"/stats"</span>)
+    <span class="kw">public</span> Map&lt;String, Object&gt; <span class="met">getStats</span>() {
+        <span class="kw">return</span> Map.of(
+            <span class="str">"totalOrders"</span>, orderRepository.count(),
+            <span class="str">"totalBookings"</span>, bookingRepository.count(),
+            <span class="str">"totalMenuItems"</span>, menuItemRepository.count(),
+            <span class="str">"totalRooms"</span>, roomRepository.count(),
+            <span class="str">"totalUsers"</span>, userRepository.count(),
+            <span class="str">"totalReviews"</span>, reviewRepository.count()
+        );
+    }
+
+    <span class="an">@GetMapping</span>(<span class="str">"/revenue"</span>)
+    <span class="kw">public</span> Map&lt;String, Object&gt; <span class="met">getRevenue</span>() {
+        List&lt;<span class="cls">Order</span>&gt; orders = orderRepository.findAll();
+        Map&lt;<span class="cls">YearMonth</span>, Double&gt; revenueMap = <span class="kw">new</span> HashMap&lt;&gt;();
+        <span class="kw">for</span> (<span class="cls">Order</span> o : orders) {
+            <span class="kw">if</span> (o.getCreatedAt() != <span class="kw">null</span> && o.getTotalAmount() != <span class="kw">null</span>) {
+                YearMonth ym = YearMonth.from(o.getCreatedAt());
+                revenueMap.merge(ym, o.getTotalAmount(), Double::sum);
+            }
+        }
+        Map&lt;String, Double&gt; formatted = revenueMap.entrySet().stream()
+            .collect(Collectors.toMap(
+                e -&gt; e.getKey().toString(),
+                Map.Entry::getValue));
+        <span class="kw">return</span> Map.of(<span class="str">"monthlyRevenue"</span>, formatted);
+    }
+}</pre>
+</div>
+
+<div class="page-break"></div>
+
+<h2>4.2 API usage logs JPQL repository queries</h2>
+<p>Calculates success/failure metrics directly on the database to improve speed.</p>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">ApiUsageLogRepository.java</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@Repository</span>
+<span class="kw">public interface</span> <span class="cls">ApiUsageLogRepository</span> <span class="kw">extends</span> <span class="cls">JpaRepository</span>&lt;<span class="cls">ApiUsageLog</span>, Long&gt; {
+
+    List&lt;<span class="cls">ApiUsageLog</span>&gt; <span class="met">findAllByOrderByTimestampDesc</span>();
+
+    <span class="cm">// Count successful requests (status code 2xx)</span>
+    <span class="an">@Query</span>(<span class="str">"SELECT COUNT(l) FROM ApiUsageLog l WHERE l.statusCode >= 200 AND l.statusCode < 300"</span>)
+    <span class="kw">long</span> <span class="met">countSuccessfulRequests</span>();
+
+    <span class="cm">// Count failure requests (status code 4xx/5xx)</span>
+    <span class="an">@Query</span>(<span class="str">"SELECT COUNT(l) FROM ApiUsageLog l WHERE l.statusCode >= 400"</span>)
+    <span class="kw">long</span> <span class="met">countFailedRequests</span>();
+
+    <span class="cm">// Average request latency</span>
+    <span class="an">@Query</span>(<span class="str">"SELECT AVG(l.responseTimeMs) FROM ApiUsageLog l"</span>)
+    Double <span class="met">getAverageResponseTime</span>();
+}</pre>
+</div>
+
+<h2>4.3 Partner security and rate limiting filter</h2>
+<p>Validates aggregator keys in incoming headers and enforces rate limits under 60 requests per minute.</p>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">PartnerAuthFilter.java</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@Component</span>
+<span class="an">@RequiredArgsConstructor</span>
+<span class="an">@Order(1)</span>
+<span class="kw">public class</span> <span class="cls">PartnerAuthFilter</span> <span class="kw">extends</span> <span class="cls">OncePerRequestFilter</span> {
+
+    <span class="kw">private final</span> <span class="cls">PartnerIntegrationRepository</span> partnerRepo;
+    <span class="kw">private final</span> Map&lt;String, AtomicLong&gt; rateLimiter = <span class="kw">new</span> ConcurrentHashMap&lt;&gt;();
+
+    <span class="an">@Override</span>
+    <span class="kw">protected void</span> <span class="met">doFilterInternal</span>(HttpServletRequest req, HttpServletResponse res, FilterChain chain) {
+        String apiKey = req.getHeader(<span class="str">"X-Partner-Key"</span>);
+        <span class="kw">if</span> (apiKey == <span class="kw">null</span>) {
+            res.setStatus(<span class="num">401</span>);
+            <span class="kw">return</span>;
+        }
+        
+        <span class="cls">PartnerIntegration</span> partner = partnerRepo.findByApiKey(apiKey).orElse(<span class="kw">null</span>);
+        <span class="kw">if</span> (partner == <span class="kw">null</span> || partner.getStatus() != Status.ACTIVE) {
+            res.setStatus(<span class="num">401</span>);
+            <span class="kw">return</span>;
+        }
+
+        <span class="kw">long</span> currentMinute = System.currentTimeMillis() / <span class="num">60000</span>;
+        String limitKey = partner.getName() + <span class="str">":"</span> + currentMinute;
+        rateLimiter.putIfAbsent(limitKey, <span class="kw">new</span> AtomicLong(<span class="num">0</span>));
+        
+        <span class="kw">if</span> (rateLimiter.get(limitKey).incrementAndGet() &gt; <span class="num">60</span>) {
+            res.setStatus(<span class="num">429</span>);
+            <span class="kw">return</span>;
+        }
+
+        chain.doFilter(req, res);
+    }
+}</pre>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="footer">
+  Dil Sai Tadka — Lodgings &amp; Restaurant Management System Portfolio © 2026
+</div>
+
+</body>
+</html>

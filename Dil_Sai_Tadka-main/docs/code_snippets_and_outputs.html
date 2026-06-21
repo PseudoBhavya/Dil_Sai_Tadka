@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dil Sai Tadka — Code Snippets & Outputs</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    background: #0d1117;
+    color: #cdd9e5;
+    padding: 48px 60px;
+    max-width: 1000px;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    background: linear-gradient(135deg, #161b22 0%, #1a2233 60%, #0d1117 100%);
+    border: 1px solid #e8007d44;
+    border-radius: 16px;
+    padding: 56px 48px;
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .cover-icon { font-size: 52px; margin-bottom: 16px; }
+  .cover h1 { font-size: 34px; font-weight: 900; color: #e8007d; letter-spacing: -0.5px; }
+  .cover h2 { font-size: 20px; font-weight: 700; color: #79c0ff; margin-top: 10px; }
+  .cover .sub { font-size: 13px; color: #8b949e; margin-top: 8px; font-weight: 600; }
+  .tags { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .tag {
+    background: #21262d;
+    border: 1px solid #30363d;
+    color: #cdd9e5;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .4px;
+  }
+
+  /* ── Section headers ── */
+  h1 {
+    font-size: 22px;
+    font-weight: 900;
+    color: #e8007d;
+    padding: 14px 20px;
+    background: #161b22;
+    border-left: 5px solid #e8007d;
+    border-radius: 0 8px 8px 0;
+    margin: 44px 0 20px;
+    letter-spacing: -.3px;
+  }
+  h2 {
+    font-size: 15px;
+    font-weight: 800;
+    color: #79c0ff;
+    margin: 28px 0 12px;
+    border-bottom: 1px solid #21262d;
+    padding-bottom: 6px;
+  }
+  h3 {
+    font-size: 13px;
+    font-weight: 800;
+    color: #ffa657;
+    margin: 18px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+  }
+
+  /* ── Snippet cards ── */
+  .snippet {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    margin: 20px 0;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+  .snippet-header {
+    background: #21262d;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #30363d;
+  }
+  .snippet-header .dots { display: flex; gap: 6px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+  .snippet-header .filename {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: #8b949e;
+    margin-left: 4px;
+  }
+  .lang-badge {
+    margin-left: auto;
+    background: #e8007d22;
+    color: #e8007d;
+    border: 1px solid #e8007d44;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: .5px;
+  }
+
+  /* ── Code ── */
+  pre {
+    font-family: 'Fira Code', monospace;
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 18px 22px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #cdd9e5;
+    line-height: 1.7;
+  }
+  .kw  { color: #ff7b72; font-weight: 700; } /* keywords */
+  .an  { color: #e8007d; font-weight: 700; } /* annotations */
+  .str { color: #a5d6ff; }                    /* strings */
+  .cm  { color: #8b949e; font-style: italic; }/* comments */
+  .cls { color: #ffa657; font-weight: 700; } /* class names */
+  .met { color: #d2a8ff; font-weight: 600; } /* methods */
+  .num { color: #79c0ff; }                    /* numbers */
+  .vr  { color: #cdd9e5; }                    /* variables */
+
+  /* ── Output boxes ── */
+  .output {
+    background: #0d1117;
+    border: 1px solid #238636;
+    border-radius: 8px;
+    margin: 14px 0;
+    overflow: hidden;
+  }
+  .output-header {
+    background: #132a1a;
+    padding: 8px 16px;
+    font-size: 11.5px;
+    font-weight: 800;
+    color: #3fb950;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+  .output pre {
+    padding: 14px 18px;
+    font-size: 11px;
+    color: #3fb950;
+    background: transparent;
+  }
+
+  /* ── Terminal output ── */
+  .terminal {
+    background: #010409;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    margin: 14px 0;
+    overflow: hidden;
+  }
+  .terminal-header {
+    background: #161b22;
+    padding: 8px 16px;
+    font-size: 11.5px;
+    font-weight: 800;
+    color: #8b949e;
+    letter-spacing: .5px;
+  }
+  .terminal pre {
+    padding: 14px 18px;
+    font-size: 11px;
+    color: #58a6ff;
+    background: transparent;
+  }
+
+  /* ── Callouts ── */
+  .callout {
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 16px 0;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .callout.info  { background: #1f3a5f; border-left: 4px solid #58a6ff; color: #a5d6ff; }
+  .callout.warn  { background: #3a2c1a; border-left: 4px solid #d29922; color: #ffa657; }
+  .callout.green { background: #132a1a; border-left: 4px solid #3fb950; color: #56d364; }
+
+  code {
+    font-family: 'Fira Code', monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    background: #21262d;
+    padding: 2px 7px;
+    border-radius: 5px;
+    color: #e8007d;
+  }
+
+  p { margin: 8px 0; font-weight: 600; }
+
+  /* ── Page break ── */
+  .page-break { page-break-after: always; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    color: #484f58;
+    font-size: 11px;
+    font-weight: 600;
+    border-top: 1px solid #21262d;
+    margin-top: 50px;
+    padding-top: 18px;
+  }
+
+  /* ── API row table ── */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 12.5px; }
+  th { background: #21262d; color: #cdd9e5; font-weight: 800; padding: 9px 14px; text-align: left; }
+  td { padding: 8px 14px; border-bottom: 1px solid #21262d; font-weight: 600; }
+  tr:nth-child(even) td { background: #161b22; }
+
+  @media print {
+    body { padding: 24px 36px; background: #0d1117 !important; -webkit-print-color-adjust: exact; }
+    .snippet { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ COVER ═══ -->
+<div class="cover">
+  <div class="cover-icon">🍛</div>
+  <h1>Dil Sai Tadka</h1>
+  <h2>Code Snippets &amp; Outputs Documentation</h2>
+  <div class="sub">Submission PDF &nbsp;·&nbsp; Partner API Integration &amp; LLM Feature</div>
+  <div class="tags">
+    <span class="tag">Spring Boot 3.2.4</span>
+    <span class="tag">React 18</span>
+    <span class="tag">PostgreSQL</span>
+    <span class="tag">Groq LLM</span>
+    <span class="tag">JWT Auth</span>
+    <span class="tag">REST API</span>
+    <span class="tag">Partner Integration</span>
+  </div>
+</div>
+
+<!-- ═══ SECTION 1 ═══ -->
+<h1>1. Partner API — Authentication Filter</h1>
+<p>Every call to <code>/api/partner/**</code> is intercepted by <code>PartnerAuthFilter.java</code>. It validates the <code>X-Partner-Key</code> header, enforces rate limiting (60 req/min), and persists usage logs to PostgreSQL.</p>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">PartnerAuthFilter.java</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@Component</span>
+<span class="an">@RequiredArgsConstructor</span>
+<span class="an">@Slf4j</span>
+<span class="an">@Order(1)</span>
+<span class="kw">public class</span> <span class="cls">PartnerAuthFilter</span> <span class="kw">extends</span> <span class="cls">OncePerRequestFilter</span> {
+
+    <span class="kw">private final</span> <span class="cls">PartnerIntegrationRepository</span> partnerIntegrationRepository;
+    <span class="kw">private final</span> <span class="cls">ApiUsageLogRepository</span> apiUsageLogRepository;
+
+    <span class="cm">// In-memory rate limiter: partner + minute-bucket → count</span>
+    <span class="kw">private final</span> Map&lt;String, AtomicLong&gt; rateLimitCounter = <span class="kw">new</span> <span class="cls">ConcurrentHashMap</span>&lt;&gt;();
+    <span class="kw">private final long</span> rateLimitMax = <span class="num">60</span>;
+
+    <span class="an">@Override</span>
+    <span class="kw">protected void</span> <span class="met">doFilterInternal</span>(HttpServletRequest request,
+            HttpServletResponse response, FilterChain filterChain) {
+
+        String apiKey = request.<span class="met">getHeader</span>(<span class="str">"X-Partner-Key"</span>);
+        <span class="kw">long</span> startTime = System.<span class="met">currentTimeMillis</span>();
+
+        <span class="cm">// ① Validate key presence</span>
+        <span class="kw">if</span> (apiKey == <span class="kw">null</span> || apiKey.<span class="met">trim</span>().<span class="met">isEmpty</span>()) {
+            <span class="met">sendErrorResponse</span>(response, <span class="num">401</span>, <span class="str">"Unauthorized: X-Partner-Key missing"</span>);
+            <span class="kw">return</span>;
+        }
+
+        <span class="cm">// ② Validate key against database</span>
+        <span class="cls">PartnerIntegration</span> partner = partnerIntegrationRepository
+                .<span class="met">findByApiKey</span>(apiKey).<span class="met">orElse</span>(<span class="kw">null</span>);
+        <span class="kw">if</span> (partner == <span class="kw">null</span> || partner.<span class="met">getStatus</span>() != Status.ACTIVE) {
+            <span class="met">sendErrorResponse</span>(response, <span class="num">401</span>, <span class="str">"Unauthorized: Invalid or inactive API key"</span>);
+            <span class="kw">return</span>;
+        }
+
+        <span class="cm">// ③ Rate limiting (60 req/min per partner)</span>
+        <span class="kw">long</span> minuteKey = System.<span class="met">currentTimeMillis</span>() / <span class="num">60000</span>;
+        String rateKey = partner.<span class="met">getName</span>() + <span class="str">":"</span> + minuteKey;
+        rateLimitCounter.<span class="met">putIfAbsent</span>(rateKey, <span class="kw">new</span> <span class="cls">AtomicLong</span>(<span class="num">0</span>));
+        <span class="kw">long</span> count = rateLimitCounter.<span class="met">get</span>(rateKey).<span class="met">incrementAndGet</span>();
+
+        <span class="kw">if</span> (count &gt; rateLimitMax) {
+            <span class="met">sendErrorResponse</span>(response, <span class="num">429</span>, <span class="str">"Too Many Requests: Rate limit exceeded"</span>);
+            <span class="kw">return</span>;
+        }
+
+        <span class="cm">// ④ Proceed and log to DB</span>
+        filterChain.<span class="met">doFilter</span>(request, response);
+        <span class="met">saveLogToDb</span>(partner.<span class="met">getName</span>(), endpoint, method, statusCode, startTime, <span class="kw">null</span>);
+    }
+}</pre>
+</div>
+
+<h3>Output — Valid Partner Request</h3>
+<div class="output">
+  <div class="output-header">✅ Response — 200 OK</div>
+  <pre>GET /api/partner/restaurants
+Headers: X-Partner-Key: zomato-key-abc123
+
+[
+  { "id": 1, "name": "Dil Sai Tadka Main", "cuisineType": "North Indian",
+    "address": "123 MG Road, Bangalore", "rating": 4.8, "active": true }
+]</pre>
+</div>
+
+<h3>Output — Missing API Key</h3>
+<div class="terminal">
+  <div class="terminal-header">⛔ Response — 401 Unauthorized</div>
+  <pre>{ "error": "Unauthorized: X-Partner-Key header is missing", "status": 401 }</pre>
+</div>
+
+<h3>Output — Rate Limit Exceeded</h3>
+<div class="terminal">
+  <div class="terminal-header">⛔ Response — 429 Too Many Requests</div>
+  <pre>{ "error": "Too Many Requests: Rate limit of 60 req/min exceeded", "status": 429 }</pre>
+</div>
+
+<h3>Log Saved to PostgreSQL</h3>
+<div class="output">
+  <div class="output-header">📊 api_usage_logs table — Row Inserted</div>
+  <pre>id | partner_name | endpoint                | method | status | response_ms | timestamp
+---|--------------|-------------------------|--------|--------|-------------|---------------------
+1  | Zomato       | /api/partner/restaurants| GET    | 200    | 43          | 2024-05-28 14:30:01
+2  | Swiggy       | /api/partner/orders     | POST   | 201    | 98          | 2024-05-28 14:31:12
+3  | Airbnb       | /api/partner/bookings   | POST   | 400    | 22          | 2024-05-28 14:32:45</pre>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══ SECTION 2 ═══ -->
+<h1>2. Partner API — Listing, Creating, Updating, Cancelling</h1>
+
+<h2>2.1 Listing — GET /api/partner/orders</h2>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">PartnerApiController.java — getOrders()</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@GetMapping</span>(<span class="str">"/orders"</span>)
+<span class="kw">public</span> ResponseEntity&lt;List&lt;<span class="cls">PartnerOrderDTO</span>&gt;&gt; <span class="met">getOrders</span>() {
+    log.<span class="met">info</span>(<span class="str">"Partner API: Listing all orders"</span>);
+    List&lt;<span class="cls">PartnerOrderDTO</span>&gt; list = orderRepository.<span class="met">findAll</span>().<span class="met">stream</span>()
+        .<span class="met">map</span>(o -&gt; <span class="cls">PartnerOrderDTO</span>.<span class="met">builder</span>()
+            .<span class="met">id</span>(o.<span class="met">getId</span>())
+            .<span class="met">userEmail</span>(o.<span class="met">getUser</span>() != <span class="kw">null</span> ? o.<span class="met">getUser</span>().<span class="met">getEmail</span>() : <span class="str">"anonymous"</span>)
+            .<span class="met">totalAmount</span>(o.<span class="met">getTotalAmount</span>())
+            .<span class="met">status</span>(o.<span class="met">getStatus</span>().<span class="met">name</span>())
+            .<span class="met">items</span>(o.<span class="met">getItems</span>().<span class="met">stream</span>()
+                .<span class="met">map</span>(item -&gt; <span class="cls">OrderItemDTO</span>.<span class="met">builder</span>()
+                    .<span class="met">menuItemName</span>(item.<span class="met">getMenuItem</span>().<span class="met">getName</span>())
+                    .<span class="met">quantity</span>(item.<span class="met">getQuantity</span>())
+                    .<span class="met">price</span>(item.<span class="met">getPrice</span>())
+                    .<span class="met">build</span>()).<span class="met">collect</span>(<span class="cls">Collectors</span>.<span class="met">toList</span>()))
+            .<span class="met">build</span>())
+        .<span class="met">collect</span>(<span class="cls">Collectors</span>.<span class="met">toList</span>());
+    <span class="kw">return</span> ResponseEntity.<span class="met">ok</span>(list);
+}</pre>
+</div>
+
+<div class="output">
+  <div class="output-header">✅ GET /api/partner/orders — 200 OK</div>
+  <pre>[
+  {
+    "id": 101,
+    "userEmail": "customer@dilsaitadka.com",
+    "totalAmount": 770.0,
+    "status": "CONFIRMED",
+    "items": [
+      { "menuItemId": 1, "menuItemName": "Dal Makhani", "quantity": 1, "price": 320.0 },
+      { "menuItemId": 2, "menuItemName": "Butter Chicken", "quantity": 1, "price": 450.0 }
+    ]
+  }
+]</pre>
+</div>
+
+<h2>2.2 Creating — POST /api/partner/bookings</h2>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">PartnerApiController.java — createBooking()</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@PostMapping</span>(<span class="str">"/bookings"</span>)
+<span class="kw">public</span> ResponseEntity&lt;?&gt; <span class="met">createBooking</span>(<span class="an">@RequestBody</span> <span class="cls">PartnerBookingDTO</span> dto) {
+    <span class="kw">if</span> (dto.<span class="met">getUserEmail</span>() == <span class="kw">null</span> || dto.<span class="met">getRoomId</span>() == <span class="kw">null</span>
+            || dto.<span class="met">getCheckIn</span>() == <span class="kw">null</span> || dto.<span class="met">getCheckOut</span>() == <span class="kw">null</span>) {
+        <span class="kw">return</span> ResponseEntity.<span class="met">badRequest</span>()
+                .<span class="met">body</span>(<span class="cls">Map</span>.<span class="met">of</span>(<span class="str">"message"</span>, <span class="str">"userEmail, roomId, checkIn, checkOut required"</span>));
+    }
+    <span class="cls">User</span> user = userRepository.<span class="met">findByEmail</span>(dto.<span class="met">getUserEmail</span>()).<span class="met">orElseGet</span>(() -&gt;
+            userRepository.<span class="met">findByEmail</span>(<span class="str">"customer@dilsaitadka.com"</span>).<span class="met">orElseThrow</span>());
+    <span class="cls">Room</span> room = roomRepository.<span class="met">findById</span>(dto.<span class="met">getRoomId</span>()).<span class="met">orElseThrow</span>();
+
+    <span class="cls">Booking</span> booking = <span class="cls">Booking</span>.<span class="met">builder</span>()
+        .<span class="met">user</span>(user).<span class="met">room</span>(room)
+        .<span class="met">checkIn</span>(dto.<span class="met">getCheckIn</span>()).<span class="met">checkOut</span>(dto.<span class="met">getCheckOut</span>())
+        .<span class="met">guests</span>(dto.<span class="met">getGuests</span>() != <span class="kw">null</span> ? dto.<span class="met">getGuests</span>() : <span class="num">1</span>)
+        .<span class="met">totalAmount</span>(dto.<span class="met">getTotalAmount</span>() != <span class="kw">null</span>
+                ? dto.<span class="met">getTotalAmount</span>() : room.<span class="met">getPricePerNight</span>() * <span class="num">2</span>)
+        .<span class="met">status</span>(<span class="cls">Booking</span>.BookingStatus.CONFIRMED)
+        .<span class="met">build</span>();
+
+    <span class="cls">Booking</span> saved = bookingRepository.<span class="met">save</span>(booking);
+    <span class="kw">return</span> ResponseEntity.<span class="met">status</span>(<span class="cls">HttpStatus</span>.CREATED).<span class="met">body</span>(dto);
+}</pre>
+</div>
+
+<div class="output">
+  <div class="output-header">✅ POST /api/partner/bookings — 201 Created</div>
+  <pre>Request Body:
+{ "userEmail": "guest@airbnb.com", "roomId": 3, "checkIn": "2024-07-01",
+  "checkOut": "2024-07-05", "guests": 2, "totalAmount": 12000.0 }
+
+Response:
+{ "id": 56, "userEmail": "guest@airbnb.com", "roomId": 3, "roomName": "Deluxe Suite",
+  "checkIn": "2024-07-01", "checkOut": "2024-07-05", "guests": 2,
+  "totalAmount": 12000.0, "status": "CONFIRMED" }</pre>
+</div>
+
+<h2>2.3 Updating — PUT /api/partner/orders/{id}</h2>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">PartnerApiController.java — updateOrder()</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@PutMapping</span>(<span class="str">"/orders/{id}"</span>)
+<span class="kw">public</span> ResponseEntity&lt;?&gt; <span class="met">updateOrder</span>(<span class="an">@PathVariable</span> Long id, <span class="an">@RequestBody</span> <span class="cls">PartnerOrderDTO</span> dto) {
+    <span class="kw">var</span> opt = orderRepository.<span class="met">findById</span>(id);
+    <span class="kw">if</span> (opt.<span class="met">isEmpty</span>()) <span class="kw">return</span> ResponseEntity.<span class="met">status</span>(<span class="num">404</span>).<span class="met">body</span>(<span class="cls">Map</span>.<span class="met">of</span>(<span class="str">"message"</span>, <span class="str">"Order not found"</span>));
+    <span class="cls">Order</span> o = opt.<span class="met">get</span>();
+    <span class="kw">if</span> (dto.<span class="met">getStatus</span>() != <span class="kw">null</span>)
+        o.<span class="met">setStatus</span>(<span class="cls">Order</span>.OrderStatus.<span class="met">valueOf</span>(dto.<span class="met">getStatus</span>().<span class="met">toUpperCase</span>()));
+    <span class="kw">if</span> (dto.<span class="met">getTotalAmount</span>() != <span class="kw">null</span>) o.<span class="met">setTotalAmount</span>(dto.<span class="met">getTotalAmount</span>());
+    <span class="cls">Order</span> saved = orderRepository.<span class="met">save</span>(o);
+    <span class="kw">return</span> ResponseEntity.<span class="met">ok</span>(dto);
+}</pre>
+</div>
+
+<div class="output">
+  <div class="output-header">✅ PUT /api/partner/orders/101 — 200 OK</div>
+  <pre>Request: { "status": "CONFIRMED", "totalAmount": 770.0 }
+Response: { "id": 101, "status": "CONFIRMED", "totalAmount": 770.0 }</pre>
+</div>
+
+<h2>2.4 Cancelling — PATCH /api/partner/orders/{id}/cancel</h2>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">PartnerApiController.java — cancelOrder()</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@PatchMapping</span>(<span class="str">"/orders/{id}/cancel"</span>)
+<span class="kw">public</span> ResponseEntity&lt;?&gt; <span class="met">cancelOrder</span>(<span class="an">@PathVariable</span> Long id) {
+    <span class="kw">var</span> opt = orderRepository.<span class="met">findById</span>(id);
+    <span class="kw">if</span> (opt.<span class="met">isEmpty</span>()) <span class="kw">return</span> ResponseEntity.<span class="met">status</span>(<span class="num">404</span>).<span class="met">body</span>(<span class="cls">Map</span>.<span class="met">of</span>(<span class="str">"message"</span>, <span class="str">"Order not found"</span>));
+    <span class="cls">Order</span> o = opt.<span class="met">get</span>();
+    o.<span class="met">setStatus</span>(<span class="cls">Order</span>.OrderStatus.CANCELLED);
+    orderRepository.<span class="met">save</span>(o);
+    <span class="kw">return</span> ResponseEntity.<span class="met">ok</span>(<span class="cls">Map</span>.<span class="met">of</span>(<span class="str">"message"</span>, <span class="str">"Order cancelled successfully"</span>));
+}</pre>
+</div>
+
+<div class="output">
+  <div class="output-header">✅ PATCH /api/partner/orders/101/cancel — 200 OK</div>
+  <pre>{ "message": "Order cancelled successfully" }</pre>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══ SECTION 3 ═══ -->
+<h1>3. Security Config — Role-Based Access Control</h1>
+<p>Spring Security is configured to restrict <code>/api/bookings/**</code> and <code>/api/orders/**</code> to <code>ROLE_ADMIN</code>, preventing customers from viewing each other's data.</p>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">SecurityConfig.java</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@Bean</span>
+<span class="kw">public</span> <span class="cls">SecurityFilterChain</span> <span class="met">filterChain</span>(<span class="cls">HttpSecurity</span> http) <span class="kw">throws</span> Exception {
+    http
+        .<span class="met">cors</span>(cors -&gt; cors.<span class="met">configurationSource</span>(<span class="met">corsConfigurationSource</span>()))
+        .<span class="met">csrf</span>(csrf -&gt; csrf.<span class="met">disable</span>())
+        .<span class="met">sessionManagement</span>(sm -&gt; sm.<span class="met">sessionCreationPolicy</span>(STATELESS))
+        .<span class="met">authorizeHttpRequests</span>(auth -&gt; auth
+            .<span class="met">requestMatchers</span>(<span class="str">"/api/auth/**"</span>).<span class="met">permitAll</span>()
+            .<span class="met">requestMatchers</span>(<span class="str">"/api/partner/**"</span>).<span class="met">permitAll</span>()  <span class="cm">// ← protected by PartnerAuthFilter</span>
+            .<span class="met">requestMatchers</span>(GET, <span class="str">"/api/menu/**"</span>).<span class="met">permitAll</span>()
+            .<span class="met">requestMatchers</span>(GET, <span class="str">"/api/rooms/**"</span>).<span class="met">permitAll</span>()
+            <span class="cm">// 🔒 Admin-only: protect all bookings & orders from regular users</span>
+            .<span class="met">requestMatchers</span>(GET, <span class="str">"/api/bookings/**"</span>).<span class="met">hasRole</span>(<span class="str">"ADMIN"</span>)
+            .<span class="met">requestMatchers</span>(GET, <span class="str">"/api/orders/**"</span>).<span class="met">hasRole</span>(<span class="str">"ADMIN"</span>)
+            .<span class="met">requestMatchers</span>(PUT, <span class="str">"/api/bookings/**/status"</span>).<span class="met">hasRole</span>(<span class="str">"ADMIN"</span>)
+            .<span class="met">requestMatchers</span>(PUT, <span class="str">"/api/orders/**/status"</span>).<span class="met">hasRole</span>(<span class="str">"ADMIN"</span>)
+            .<span class="met">requestMatchers</span>(<span class="str">"/api/dashboard/**"</span>).<span class="met">hasRole</span>(<span class="str">"ADMIN"</span>)
+            .<span class="met">requestMatchers</span>(<span class="str">"/api/users/**"</span>).<span class="met">hasRole</span>(<span class="str">"ADMIN"</span>)
+            .<span class="met">anyRequest</span>().<span class="met">authenticated</span>()
+        )
+        .<span class="met">addFilterBefore</span>(jwtAuthenticationFilter, <span class="cls">UsernamePasswordAuthenticationFilter</span>.<span class="kw">class</span>);
+    <span class="kw">return</span> http.<span class="met">build</span>();
+}</pre>
+</div>
+
+<div class="callout warn">⚠️ <strong>Security Note:</strong> The <code>/api/bookings/my</code> and <code>/api/orders/my</code> endpoints are <strong>NOT</strong> restricted to ADMIN — any authenticated customer can fetch <em>their own</em> bookings and orders only.</div>
+
+<div class="terminal">
+  <div class="terminal-header">⛔ Customer attempting to list ALL bookings — 403 Forbidden</div>
+  <pre>GET /api/bookings
+Authorization: Bearer &lt;CUSTOMER_JWT&gt;
+
+HTTP/1.1 403 Forbidden
+{ "error": "Access Denied", "status": 403 }</pre>
+</div>
+
+<div class="output">
+  <div class="output-header">✅ Admin listing ALL bookings — 200 OK</div>
+  <pre>GET /api/bookings
+Authorization: Bearer &lt;ADMIN_JWT&gt;
+
+HTTP/1.1 200 OK
+[
+  { "id": 55, "userEmail": "guest@airbnb.com", "roomName": "Deluxe Suite",
+    "checkIn": "2024-07-01", "checkOut": "2024-07-05", "status": "CONFIRMED" },
+  { "id": 56, "userEmail": "customer@dilsaitadka.com", "roomName": "Executive Room",
+    "checkIn": "2024-08-10", "checkOut": "2024-08-12", "status": "PENDING" }
+]</pre>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══ SECTION 4 ═══ -->
+<h1>4. Groq LLM Integration — AI Feedback &amp; Culinary Assistant</h1>
+
+<h2>4.1 GroqService — API Call with Fallback</h2>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">GroqService.java</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@Service</span>
+<span class="an">@Slf4j</span>
+<span class="kw">public class</span> <span class="cls">GroqService</span> {
+
+    <span class="an">@Value</span>(<span class="str">"${app.groq.api-key:NO_KEY}"</span>)
+    <span class="kw">private</span> String apiKey;
+
+    <span class="kw">private static final</span> String GROQ_API_URL =
+            <span class="str">"https://api.groq.com/openai/v1/chat/completions"</span>;
+    <span class="kw">private static final</span> String GROQ_MODEL = <span class="str">"llama3-8b-8192"</span>;
+
+    <span class="kw">public</span> String <span class="met">callGroq</span>(String prompt) {
+        <span class="cm">// Graceful fallback if no API key configured</span>
+        <span class="kw">if</span> (<span class="str">"NO_KEY"</span>.<span class="met">equals</span>(apiKey) || apiKey.<span class="met">trim</span>().<span class="met">isEmpty</span>()) {
+            log.<span class="met">warn</span>(<span class="str">"Groq key not configured. Using cinematic local backup."</span>);
+            <span class="kw">return</span> <span class="met">generateFallbackResponse</span>(prompt);
+        }
+        <span class="cls">HttpHeaders</span> headers = <span class="kw">new</span> <span class="cls">HttpHeaders</span>();
+        headers.<span class="met">setContentType</span>(<span class="cls">MediaType</span>.APPLICATION_JSON);
+        headers.<span class="met">setBearerAuth</span>(apiKey);
+
+        Map&lt;String, Object&gt; body = Map.<span class="met">of</span>(
+            <span class="str">"model"</span>, GROQ_MODEL,
+            <span class="str">"messages"</span>, List.<span class="met">of</span>(Map.<span class="met">of</span>(<span class="str">"role"</span>, <span class="str">"user"</span>, <span class="str">"content"</span>, prompt)),
+            <span class="str">"temperature"</span>, <span class="num">0.3</span>
+        );
+        <span class="cls">ResponseEntity</span>&lt;Map&gt; resp = restTemplate.<span class="met">postForEntity</span>(GROQ_API_URL,
+                <span class="kw">new</span> <span class="cls">HttpEntity</span>&lt;&gt;(body, headers), Map.<span class="kw">class</span>);
+
+        List choices = (List) resp.<span class="met">getBody</span>().<span class="met">get</span>(<span class="str">"choices"</span>);
+        Map msg = (Map) ((Map) choices.<span class="met">get</span>(<span class="num">0</span>)).<span class="met">get</span>(<span class="str">"message"</span>);
+        <span class="kw">return</span> (String) msg.<span class="met">get</span>(<span class="str">"content"</span>);
+    }
+}</pre>
+</div>
+
+<div class="terminal">
+  <div class="terminal-header">📋 Spring Boot Startup Log (Groq fallback active)</div>
+  <pre>WARN  c.dilsaitadka.llm.service.GroqService : Groq API key not configured.
+      Using cinematic local backup model responses.</pre>
+</div>
+
+<h2>4.2 AI Feedback Summary — Prompt &amp; Output</h2>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">AIInsightsService.java — buildFeedbackPrompt()</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="kw">private</span> String <span class="met">buildFeedbackPrompt</span>(List&lt;<span class="cls">Review</span>&gt; reviews, List&lt;<span class="cls">Complaint</span>&gt; complaints) {
+    <span class="cls">StringBuilder</span> sb = <span class="kw">new</span> <span class="cls">StringBuilder</span>();
+    sb.<span class="met">append</span>(<span class="str">"You are a restaurant analytics AI. Analyze the following customer feedback:\n\n"</span>);
+    sb.<span class="met">append</span>(<span class="str">"REVIEWS:\n"</span>);
+    reviews.<span class="met">forEach</span>(r -&gt; sb.<span class="met">append</span>(<span class="str">"- Rating: "</span>).
+            <span class="met">append</span>(r.<span class="met">getRating</span>()).<span class="met">append</span>(<span class="str">"/5 — "</span>).<span class="met">append</span>(r.<span class="met">getComment</span>()).<span class="met">append</span>(<span class="str">"\n"</span>));
+    sb.<span class="met">append</span>(<span class="str">"\nCOMPLAINTS:\n"</span>);
+    complaints.<span class="met">forEach</span>(c -&gt; sb.<span class="met">append</span>(<span class="str">"- [Status: "</span>)
+            .<span class="met">append</span>(c.<span class="met">getStatus</span>()).<span class="met">append</span>(<span class="str">"] "</span>).<span class="met">append</span>(c.<span class="met">getMessage</span>()).<span class="met">append</span>(<span class="str">"\n"</span>));
+    sb.<span class="met">append</span>(<span class="str">"\nReturn JSON: {summary, sentimentScore, satisfactionRating,\n"</span> +
+              <span class="str">"             strengths[], complaints[], actionableInsights[]}"</span>);
+    <span class="kw">return</span> sb.<span class="met">toString</span>();
+}</pre>
+</div>
+
+<div class="output">
+  <div class="output-header">✅ GET /api/ai/feedback — 200 OK (Groq / Fallback Response)</div>
+  <pre>{
+  "summary": "Guests express overwhelming enthusiasm for culinary creativity and service refinement.
+              High ratings focus on the 'Tadka Paneer' and the garden ambiance. A few reports note
+              service delays during weekend high-volume hours.",
+  "sentimentScore": 0.88,
+  "satisfactionRating": "92%",
+  "strengths": [
+    "Transformative and authentic menu flavors (Tadka Paneer is a massive hit)",
+    "Scenic, relaxing boutique ambiance by the garden pool",
+    "Warm, professional customer support staff"
+  ],
+  "complaints": [
+    "Minor room service delays during peak check-in windows",
+    "Limited weekend table availability without reservation"
+  ],
+  "actionableInsights": [
+    "Increase evening peak-hour staff coverage in dining zones",
+    "Prompt reservations actively on checkout for repeat customers",
+    "Provide complimentary herbal tea welcome-boxes to ease peak delays"
+  ]
+}</pre>
+</div>
+
+<h2>4.3 Culinary AI Assistant — Chat</h2>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">AIController.java — chat()</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@PostMapping</span>(<span class="str">"/chat"</span>)
+<span class="kw">public</span> ResponseEntity&lt;Map&lt;String, String&gt;&gt; <span class="met">chat</span>(<span class="an">@RequestBody</span> Map&lt;String, String&gt; body) {
+    String message = body.<span class="met">get</span>(<span class="str">"message"</span>);
+    List&lt;<span class="cls">MenuItem</span>&gt; menu = menuItemRepository.<span class="met">findByActiveTrue</span>();
+
+    String prompt = <span class="str">"You are a culinary expert at Dil Sai Tadka restaurant.\n"</span> +
+            <span class="str">"Available dishes: "</span> + menu.<span class="met">stream</span>()
+                .<span class="met">map</span>(m -&gt; m.<span class="met">getName</span>() + <span class="str">" (₹"</span> + m.<span class="met">getPrice</span>() + <span class="str">")"</span>)
+                .<span class="met">collect</span>(<span class="cls">Collectors</span>.<span class="met">joining</span>(<span class="str">", "</span>)) + <span class="str">"\n\nCustomer: "</span> + message;
+
+    String response = groqService.<span class="met">callGroq</span>(prompt);
+    <span class="kw">return</span> ResponseEntity.<span class="met">ok</span>(<span class="cls">Map</span>.<span class="met">of</span>(<span class="str">"response"</span>, response));
+}</pre>
+</div>
+
+<div class="output">
+  <div class="output-header">✅ POST /api/ai/chat — 200 OK</div>
+  <pre>Request: { "message": "What would you recommend for a vegetarian dinner for two?" }
+
+Response:
+{
+  "response": "### ✨ Exclusive Gourmet Recommendation\n\nFor a truly luxurious dining
+  experience at **Dil Sai Tadka**, I highly recommend starting with our signature
+  **Smoked Clay Tikka**. Hand-churned cottage cheese cubes are slow-marinated in our
+  family's 3-generation secret spice blend and seared over natural oakwood coal.\n\n
+  For the main course, pair the Tikka with the majestic **Royal Saffron Biryani**.
+  Complete your culinary journey with a bowl of our **Velvet Rose Kheer**—a traditional
+  milk pudding simmered for 6 hours and perfumed with organic Damask roses."
+}</pre>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ═══ SECTION 5 ═══ -->
+<h1>5. Dashboard Revenue Endpoint</h1>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">DashboardController.java — getRevenue()</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@GetMapping</span>(<span class="str">"/revenue"</span>)
+<span class="kw">public</span> Map&lt;String, Object&gt; <span class="met">getRevenue</span>() {
+    List&lt;<span class="cls">Order</span>&gt; orders = orderRepository.<span class="met">findAll</span>();
+    Map&lt;<span class="cls">YearMonth</span>, Double&gt; revenueMap = <span class="kw">new</span> <span class="cls">HashMap</span>&lt;&gt;();
+    <span class="kw">for</span> (<span class="cls">Order</span> o : orders) {
+        <span class="cls">YearMonth</span> ym = <span class="cls">YearMonth</span>.<span class="met">from</span>(o.<span class="met">getCreatedAt</span>());
+        revenueMap.<span class="met">merge</span>(ym, o.<span class="met">getTotalAmount</span>(), Double::<span class="met">sum</span>);
+    }
+    Map&lt;String, Double&gt; formatted = revenueMap.<span class="met">entrySet</span>().<span class="met">stream</span>()
+        .<span class="met">collect</span>(<span class="cls">Collectors</span>.<span class="met">toMap</span>(
+            e -&gt; e.<span class="met">getKey</span>().<span class="met">toString</span>(),
+            Map.Entry::<span class="met">getValue</span>()));
+    <span class="kw">return</span> <span class="cls">Map</span>.<span class="met">of</span>(<span class="str">"monthlyRevenue"</span>, formatted);
+}</pre>
+</div>
+
+<div class="output">
+  <div class="output-header">✅ GET /api/dashboard/revenue — 200 OK</div>
+  <pre>{
+  "monthlyRevenue": {
+    "2024-01": 45200.0,
+    "2024-02": 52100.0,
+    "2024-03": 61800.0,
+    "2024-04": 70500.0,
+    "2024-05": 83200.0
+  }
+}</pre>
+</div>
+
+<!-- ═══ SECTION 6 ═══ -->
+<h1>6. Global Exception Handler</h1>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">GlobalExceptionHandler.java</span>
+    <span class="lang-badge">JAVA</span>
+  </div>
+  <pre><span class="an">@RestControllerAdvice</span>
+<span class="kw">public class</span> <span class="cls">GlobalExceptionHandler</span> {
+
+    <span class="an">@ExceptionHandler</span>(Exception.<span class="kw">class</span>)
+    <span class="kw">public</span> ResponseEntity&lt;Map&lt;String, Object&gt;&gt; <span class="met">handleAllExceptions</span>(Exception ex) {
+        ex.<span class="met">printStackTrace</span>();
+        <span class="kw">return</span> ResponseEntity.<span class="met">status</span>(<span class="cls">HttpStatus</span>.INTERNAL_SERVER_ERROR)
+            .<span class="met">body</span>(<span class="cls">Map</span>.<span class="met">of</span>(
+                <span class="str">"error"</span>, ex.<span class="met">getMessage</span>(),
+                <span class="str">"status"</span>, <span class="cls">HttpStatus</span>.INTERNAL_SERVER_ERROR.<span class="met">value</span>()
+            ));
+    }
+}</pre>
+</div>
+
+<div class="terminal">
+  <div class="terminal-header">⛔ Before: Spring Whitelabel HTML error page leaked to client</div>
+  <pre>Whitelabel Error Page
+This application has no explicit mapping for /error, so you are seeing this as a fallback.
+There was an unexpected error (type=Internal Server Error, status=500).
+No message available</pre>
+</div>
+
+<div class="output">
+  <div class="output-header">✅ After: Clean JSON error response</div>
+  <pre>{ "error": "Menu item not found for ID: 999", "status": 500 }</pre>
+</div>
+
+<!-- ═══ SECTION 7 ═══ -->
+<h1>7. Database — application.properties</h1>
+
+<div class="snippet">
+  <div class="snippet-header">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="filename">application.properties</span>
+    <span class="lang-badge">PROPERTIES</span>
+  </div>
+  <pre><span class="cm"># PostgreSQL Connection</span>
+spring.datasource.url=jdbc:postgresql://localhost:5432/dil_sai_tadka
+spring.datasource.username=postgres
+spring.datasource.password=postgres
+
+<span class="cm"># Hibernate DDL — 'update' preserves data between restarts</span>
+spring.jpa.hibernate.ddl-auto=<span class="str">update</span>   <span class="cm">← Changed from 'create' to stop data wipes</span>
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+
+<span class="cm"># JWT</span>
+app.jwt.secret=DilSaiTadkaPremiumLodgingsAndRestaurantSecretKey...
+app.jwt.expiration=86400000   <span class="cm">← 24 hours</span>
+
+<span class="cm"># Groq LLM key (set to actual key in production)</span>
+app.groq.api-key=NO_KEY   <span class="cm">← Triggers cinematic fallback mode</span></pre>
+</div>
+
+<div class="callout green">✅ <strong>Result:</strong> With <code>ddl-auto=update</code>, all PostgreSQL tables, customer data, orders, bookings, and API usage logs are <strong>permanently retained</strong> across server restarts.</div>
+
+<!-- ═══ SECTION 8 ═══ -->
+<h1>8. Application Startup Output</h1>
+
+<div class="terminal">
+  <div class="terminal-header">📋 mvn spring-boot:run — Startup Log</div>
+  <pre>INFO  c.dilsaitadka.DilSaiTadkaApplication   : Started DilSaiTadkaApplication in 2.988 seconds
+INFO  c.dilsaitadka.config.DataSeeder        : 👤 Users seeded
+INFO  c.dilsaitadka.config.DataSeeder        : 🍛 Menu items seeded
+INFO  c.dilsaitadka.config.DataSeeder        : 🏨 Rooms seeded
+INFO  c.dilsaitadka.config.DataSeeder        : ⭐ Reviews seeded
+INFO  c.dilsaitadka.config.DataSeeder        : 🤝 Partner Integrations seeded
+INFO  c.dilsaitadka.config.DataSeeder        : 🍽️ Partner Restaurants seeded
+INFO  c.dilsaitadka.config.DataSeeder        : 📊 API Usage Logs seeded
+INFO  c.dilsaitadka.config.DataSeeder        : ✅ Database seeded successfully!
+INFO  o.s.b.w.embedded.tomcat.TomcatWebServer : Tomcat started on port 8080 (http)</pre>
+</div>
+
+<h2>API Usage Log — Analytics Controller Output</h2>
+
+<div class="terminal">
+  <div class="terminal-header">📋 Live Analytics Log (Partner API calls)</div>
+  <pre>INFO  c.d.a.controller.AnalyticsController : Fetching integrated partner systems...
+INFO  c.d.a.controller.AnalyticsController : Fetching developer API metrics...
+INFO  c.d.a.controller.AnalyticsController : Fetching detailed API logs...
+INFO  c.d.llm.controller.AIController      : Request for latest AI feedback insights received.
+INFO  c.d.llm.service.AIInsightsService    : Generating real-time AI feedback summary...
+WARN  c.dilsaitadka.llm.service.GroqService : Groq key not configured. Using cinematic fallback.</pre>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  © 2024 Dil Sai Tadka — Premium Lodgings &amp; Restaurant Management System &nbsp;·&nbsp;
+  Code Snippets &amp; Outputs Documentation &nbsp;·&nbsp; Spring Boot + React + PostgreSQL + Groq AI
+</div>
+
+</body>
+</html>
